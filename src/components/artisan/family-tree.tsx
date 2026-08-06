@@ -43,10 +43,10 @@ export function FamilyTree() {
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: "-10%" }}
               transition={{ duration: reduced ? 0.3 : 1.3, delay: i * 0.14, ease: [0.22, 1, 0.36, 1] }}
-              className="group relative"
+              className="group relative h-full"
             >
               <div className="deckle-edge absolute inset-0" aria-hidden="true" />
-              <div className="grain relative px-6 py-8 text-center">
+              <div className="grain relative flex h-full flex-col justify-center px-6 py-8 text-center">
                 <div className="pointer-events-none absolute inset-3 border border-gold/25" aria-hidden="true" />
                 <Motif kind={i % 2 ? "leaf" : "marigold"} className="mx-auto h-10 w-10 text-sage/70" />
                 <h3 className="letterpress mt-4 text-2xl leading-snug text-ink">{person.name}</h3>

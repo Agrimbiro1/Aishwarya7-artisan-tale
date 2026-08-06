@@ -30,9 +30,22 @@ export function Letter() {
               transition={{ duration: 1.3, ease: [0.22, 1, 0.36, 1] }}
               aria-hidden="true"
             />
+            {/* wax seal holding the flap shut */}
+            <motion.div
+              className="absolute top-24 left-1/2 z-30 grid h-14 w-14 -translate-x-1/2 place-items-center rounded-full"
+              style={{
+                background: "radial-gradient(circle at 34% 30%, oklch(0.64 0.12 32), oklch(0.44 0.1 30))",
+                boxShadow: "0 6px 14px -8px oklch(0.32 0.03 55 / 0.9)",
+              }}
+              animate={{ opacity: open ? 0 : 1, scale: open ? 0.8 : 1, rotate: open ? -16 : 0 }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              aria-hidden="true"
+            >
+              <span className="script text-xl text-champagne/90">AV</span>
+            </motion.div>
             <div className="deckle-edge absolute inset-0" aria-hidden="true" />
 
-            <div className="grain relative px-7 py-16 sm:px-14">
+            <div className="grain relative px-7 pt-36 pb-16 sm:px-14">
               <motion.div
                 animate={{ opacity: open ? 1 : 0.25, y: open ? 0 : 18 }}
                 transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: open ? 0.35 : 0 }}
