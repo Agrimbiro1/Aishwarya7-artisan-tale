@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { CraftDefs } from "@/components/artisan/atoms";
+import { PaperBackdrop } from "@/components/artisan/paper-backdrop";
 import { Opening } from "@/components/artisan/opening";
 import { Welcome } from "@/components/artisan/welcome";
 import { InvitationCard } from "@/components/artisan/invitation-card";
@@ -54,6 +55,7 @@ function Index() {
   return (
     <>
       <CraftDefs />
+      <PaperBackdrop />
       {!opened ? <Opening onOpen={() => setOpened(true)} /> : null}
 
       <main className="relative">
