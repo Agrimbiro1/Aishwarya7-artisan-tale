@@ -16,7 +16,7 @@ export function Booklet() {
   const event = events[page]!;
 
   return (
-    <section id="ceremonies" className="relative overflow-hidden px-5 py-28" style={{ backgroundColor: "var(--champagne)" }}>
+    <section id="ceremonies" className="relative overflow-hidden px-5 py-28" style={{ backgroundColor: "rgba(245, 228, 228, 0.45)" }}>
       <div className="grain absolute inset-0" aria-hidden="true" />
       <div className="relative mx-auto max-w-4xl">
         <SectionTitle eyebrow="The Booklet of Days" title="Five evenings, bound together" script="Ceremonies" />

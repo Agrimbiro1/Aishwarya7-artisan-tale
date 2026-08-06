@@ -19,7 +19,7 @@ export function Scrapbook() {
   const current = open === null ? null : (memories[open] ?? null);
 
   return (
-    <section id="album" className="relative overflow-hidden px-5 py-28" style={{ backgroundColor: "var(--linen)" }}>
+    <section id="album" className="relative overflow-hidden px-5 py-28" style={{ backgroundColor: "rgba(248, 236, 233, 0.55)" }}>
       <div className="grain absolute inset-0" aria-hidden="true" />
       <div className="relative mx-auto max-w-5xl">
         <SectionTitle eyebrow="Pasted in by hand" title="The memory album" script="Our scrapbook" />

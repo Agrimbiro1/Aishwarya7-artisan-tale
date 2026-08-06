@@ -28,7 +28,7 @@ export function Welcome() {
       className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-24"
       style={{
         background:
-          "radial-gradient(130% 100% at 50% 0%, oklch(0.975 0.014 86), oklch(0.925 0.026 80))",
+          "radial-gradient(130% 100% at 50% 0%, rgba(255, 247, 245, 0.55), rgba(245, 228, 228, 0.4))",
       }}
     >
       <div className="grain absolute inset-0" aria-hidden="true" />
