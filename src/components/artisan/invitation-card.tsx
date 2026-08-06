@@ -17,7 +17,7 @@ const lines: { label?: string; text: string; script?: boolean }[] = [
 export function InvitationCard() {
   const reduced = useReducedMotion();
   return (
-    <section id="invitation" className="relative overflow-hidden px-5 py-28" style={{ backgroundColor: "var(--linen)" }}>
+    <section id="invitation" className="relative overflow-hidden px-5 py-28" style={{ backgroundColor: "rgba(248, 236, 233, 0.55)" }}>
       <div className="grain absolute inset-0" aria-hidden="true" />
       <div className="relative mx-auto max-w-3xl">
         <div className="deckle-edge absolute inset-0" aria-hidden="true" />

@@ -6,7 +6,7 @@ import { Motif, SectionTitle } from "./atoms";
 export function FamilyTree() {
   const reduced = useReducedMotion();
   return (
-    <section id="family" className="relative overflow-hidden px-5 py-28" style={{ backgroundColor: "var(--ivory)" }}>
+    <section id="family" className="relative overflow-hidden px-5 py-28" style={{ backgroundColor: "transparent" }}>
       <div className="grain absolute inset-0" aria-hidden="true" />
       <img
         src={tree}
