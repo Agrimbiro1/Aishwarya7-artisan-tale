@@ -281,10 +281,11 @@ export function Opening({ onOpen }: { onOpen: () => void }) {
               >
                 {/* open box interior, revealed as the lid lifts */}
                 <div
-                  className="h-44 rounded-[3px] border border-brass/40 shadow-[0_40px_70px_-34px_oklch(0_0_0/0.85)]"
+                  className="h-44 rounded-[3px] border border-brass/50 shadow-[0_40px_70px_-34px_oklch(0_0_0/0.85)]"
                   style={{
                     background:
-                      "linear-gradient(180deg, oklch(0.5 0.05 32), oklch(0.3 0.04 30))",
+                      "linear-gradient(180deg, oklch(0.34 0.04 30) 0%, oklch(0.5 0.05 30) 16%, oklch(0.78 0.05 28) 55%, oklch(0.62 0.05 28) 100%)",
+                    boxShadow: "inset 0 14px 22px -12px oklch(0 0 0 / 0.85)",
                   }}
                 />
                 {/* the lid itself */}
