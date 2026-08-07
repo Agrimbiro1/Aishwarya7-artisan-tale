@@ -8,11 +8,44 @@ export function PaperBackdrop() {
   const reduced = useReducedMotion();
 
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
-      {/* base sheet: warm cotton tone with cloudy pulp density */}
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-fabric" aria-hidden="true">
+      {/* Base handcrafted sheet: warm #f4ebda ivory cardstock tone with subtle paper grain */}
       <div className="cotton-sheet absolute inset-0" />
 
-      {/* cloudy pulp variation — very gentle marbling */}
+      {/* SVG turbulence warm cotton fiber grain layer (feTurbulence + feColorMatrix warm tint) */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: "var(--cotton-texture-svg)",
+          backgroundSize: "300px 300px",
+          mixBlendMode: "multiply",
+          opacity: "calc(var(--texture-opacity, 0.04) * 1.5)",
+        }}
+      />
+
+      {/* Woven linen crossed thread pattern (weft & warp threads at 2-3% opacity) */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: "var(--woven-linen-pattern)",
+          backgroundSize: "6px 6px, 6px 6px",
+          mixBlendMode: "multiply",
+          opacity: "calc(var(--texture-opacity, 0.04) * 12)",
+        }}
+      />
+
+      {/* Faint paper noise grain overlay (2-3% opacity) to break up any banding */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: "var(--paper-grain-svg)",
+          backgroundSize: "200px 200px",
+          mixBlendMode: "overlay",
+          opacity: "calc(var(--texture-opacity, 0.04) * 0.75)",
+        }}
+      />
+
+      {/* Cloudy pulp variation — gentle handcrafted paper marbling */}
       <div
         className="absolute -inset-[8%]"
         style={{
@@ -24,7 +57,7 @@ export function PaperBackdrop() {
         }}
       />
 
-      {/* long cotton fibre strands, both directions */}
+      {/* Long cotton fibre strands, directional weaves */}
       <div
         className="absolute inset-0"
         style={{
@@ -44,7 +77,7 @@ export function PaperBackdrop() {
         }}
       />
 
-      {/* microscopic embossing — fibres catching the light */}
+      {/* Microscopic embossing — fibers catching soft light */}
       <div
         className="absolute inset-0"
         style={{
@@ -55,7 +88,7 @@ export function PaperBackdrop() {
         }}
       />
 
-      {/* irregular pulp specks */}
+      {/* Irregular pulp specks */}
       <div
         className="absolute inset-0"
         style={{
@@ -66,34 +99,42 @@ export function PaperBackdrop() {
         }}
       />
 
-      {/* faint pressed-botanical watermarks */}
+      {/* Faint pressed-botanical watermarks */}
       <Watermarks />
 
-      {/* soft daylight from upper-left, drifting almost imperceptibly */}
+      {/* Soft daylight from upper-left, drifting imperceptibly */}
       <div
         className="absolute -inset-[10%]"
         style={{
           background:
-            "radial-gradient(60% 55% at 16% 10%, rgba(255, 252, 248, 0.75), rgba(255, 252, 248, 0) 62%)",
+            "radial-gradient(60% 55% at 16% 10%, rgba(255, 252, 246, 0.75), rgba(255, 252, 246, 0) 62%)",
           animation: reduced ? undefined : "daylight-drift 70s ease-in-out infinite",
         }}
       />
 
-      {/* ambient shadow settling into the lower-right */}
+      {/* Soft cardstock inner vignette (darkening 3-4% at edges and corners) */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: "var(--cardstock-vignette)",
+        }}
+      />
+
+      {/* Ambient shadow settling into the lower-right */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(85% 75% at 88% 100%, rgba(214, 186, 184, 0.34), rgba(214, 186, 184, 0) 65%)",
+            "radial-gradient(85% 75% at 88% 100%, rgba(200, 168, 140, 0.25), rgba(200, 168, 140, 0) 65%)",
         }}
       />
 
-      {/* the sheet is pressed into the viewport, not floating */}
+      {/* Inner paper press boundary */}
       <div
         className="absolute inset-0"
         style={{
           boxShadow:
-            "inset 0 0 120px rgba(190, 158, 156, 0.22), inset 0 0 22px rgba(255, 251, 248, 0.55)",
+            "inset 0 0 120px rgba(175, 140, 110, 0.18), inset 0 0 22px rgba(255, 251, 245, 0.55)",
         }}
       />
 

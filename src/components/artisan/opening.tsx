@@ -1,387 +1,382 @@
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useState } from "react";
 import { couple, invitation } from "@/data/wedding";
-import silkTable from "@/assets/silk-table.jpg";
-import boxLid from "@/assets/box-lid.png";
-import floral from "@/assets/floral-spray.png";
-import { Motes } from "./atoms";
+import heroIllustration from "@/assets/hero-illustration.png";
+import { Motif } from "./atoms";
+import { HeroParallaxBackdrop } from "./hero-parallax-backdrop";
+import { useAmbience } from "./use-ambience";
 
-const EASE = [0.22, 1, 0.36, 1] as const;
-const LINEN = [0.4, 0, 0.2, 1] as const;
-
-/**
- * Scene marks, in seconds, matching the storyboard:
- * 0 light   2 box   4 ribbon   6 wax   7 lid   9 slide
- * 11 unfold 13 artwork 14.4 names 15.6 details 16.6 button
- */
-const MARKS = [0, 2, 4, 6, 7, 9, 11, 13, 14.4, 15.6, 16.6];
-
-function useScene(reduced: boolean) {
-  const [scene, setScene] = useState(reduced ? MARKS.length - 1 : 0);
-  useEffect(() => {
-    if (reduced) return;
-    const timers = MARKS.map((s, i) => window.setTimeout(() => setScene(i), s * 1000));
-    return () => timers.forEach(window.clearTimeout);
-  }, [reduced]);
-  return [scene, setScene] as const;
+export interface InvitationOpeningProps {
+  onOpen?: () => void;
+  guestName?: string;
+  monogram?: string;
+  tagline?: string;
+  eyebrowText?: string;
+  brideName?: string;
+  groomName?: string;
+  heroIllustrationSrc?: string;
 }
 
-/** A wax seal that develops cracks and falls apart in a few real pieces. */
-function WaxSeal({ broken }: { broken: boolean }) {
-  const shards = [
-    { d: "M32 32 L32 2 A30 30 0 0 1 58 18 Z", x: 26, y: -30, r: 34 },
-    { d: "M32 32 L58 18 A30 30 0 0 1 44 60 Z", x: 34, y: 26, r: -22 },
-    { d: "M32 32 L44 60 A30 30 0 0 1 8 54 Z", x: -6, y: 40, r: 18 },
-    { d: "M32 32 L8 54 A30 30 0 0 1 32 2 Z", x: -32, y: 14, r: -30 },
-  ];
-  return (
-    <svg viewBox="0 0 64 64" className="h-full w-full overflow-visible" aria-hidden="true">
-      <defs>
-        <radialGradient id="waxFill" cx="34%" cy="30%">
-          <stop offset="0%" stopColor="oklch(0.64 0.14 32)" />
-          <stop offset="100%" stopColor="oklch(0.4 0.11 30)" />
-        </radialGradient>
-      </defs>
-      {shards.map((s, i) => (
-        <motion.path
-          key={i}
-          d={s.d}
-          fill="url(#waxFill)"
-          stroke="oklch(0.34 0.09 28 / 0.75)"
-          strokeWidth={broken ? 0.7 : 0}
-          initial={false}
-          animate={
-            broken
-              ? { x: s.x, y: s.y, rotate: s.r, opacity: 0, scale: 0.9 }
-              : { x: 0, y: 0, rotate: 0, opacity: 1, scale: 1 }
-          }
-          transition={{ duration: 1.5, ease: LINEN, delay: i * 0.12 }}
-          style={{ originX: "32px", originY: "32px" }}
-        />
-      ))}
-      <motion.text
-        x="32"
-        y="40"
-        textAnchor="middle"
-        className="script"
-        fontSize="22"
-        fill="oklch(0.92 0.03 86 / 0.85)"
-        animate={{ opacity: broken ? 0 : 1 }}
-        transition={{ duration: 0.7 }}
-      >
-        AV
-      </motion.text>
-    </svg>
-  );
-}
+const EASE_OUT_CUBIC = [0.22, 1, 0.36, 1] as const;
 
-/** Watercolour + ink border that paints itself around the open invitation. */
-function PaintedBorder({ on }: { on: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 320 440"
-      className="pointer-events-none absolute inset-0 h-full w-full"
-      fill="none"
-      aria-hidden="true"
-      preserveAspectRatio="none"
-    >
-      {[
-        "M20 26 C 70 12, 250 12, 300 26",
-        "M300 414 C 250 428, 70 428, 20 414",
-        "M18 30 C 8 120, 8 320, 18 410",
-        "M302 30 C 312 120, 312 320, 302 410",
-      ].map((d, i) => (
-        <motion.path
-          key={i}
-          d={d}
-          stroke="var(--gold)"
-          strokeWidth="0.9"
-          strokeLinecap="round"
-          initial={{ pathLength: 0, opacity: 0.85 }}
-          animate={on ? { pathLength: 1 } : {}}
-          transition={{ duration: 2.4, ease: "easeInOut", delay: 0.15 * i }}
-        />
-      ))}
-      {[
-        { d: "M40 60 c 14 -16, 34 -10, 30 8 c -3 16, -24 18, -30 -8", x: 0 },
-        { d: "M280 380 c -14 16, -34 10, -30 -8 c 3 -16, 24 -18, 30 8", x: 0 },
-      ].map((p, i) => (
-        <motion.path
-          key={`m${i}`}
-          d={p.d}
-          stroke="var(--brass)"
-          strokeWidth="0.8"
-          initial={{ pathLength: 0 }}
-          animate={on ? { pathLength: 1 } : {}}
-          transition={{ duration: 2, ease: "easeInOut", delay: 0.8 + i * 0.3 }}
-        />
-      ))}
-    </svg>
-  );
-}
-
-export function Opening({ onOpen }: { onOpen: () => void }) {
+export function Opening({
+  onOpen,
+  guestName = "Esteemed Guests",
+  monogram = "A & V",
+  tagline = "This invitation is\nexclusively for you",
+  eyebrowText = "WE'RE GETTING MARRIED",
+  brideName = couple.bride,
+  groomName = couple.groom,
+  heroIllustrationSrc = heroIllustration,
+}: InvitationOpeningProps) {
   const reduced = useReducedMotion();
-  const [scene, setScene] = useScene(!!reduced);
-  const [leaving, setLeaving] = useState(false);
-  const done = useRef(false);
+  const [stage, setStage] = useState<"sealed" | "opening" | "hero">("sealed");
+  const [isLeaving, setIsLeaving] = useState(false);
+  const { playing, toggle } = useAmbience();
 
-  const at = (i: number) => scene >= i;
+  // Preload the hero illustration asset during Stage 1 so there is no pop-in
+  useEffect(() => {
+    if (heroIllustrationSrc) {
+      const img = new Image();
+      img.src = heroIllustrationSrc;
+    }
+  }, [heroIllustrationSrc]);
 
-  const finish = () => {
-    if (done.current) return;
-    done.current = true;
-    setLeaving(true);
-    window.setTimeout(onOpen, reduced ? 150 : 1400);
+  // Lock body scroll while the opening animation overlay is active
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
+  const handleSealTap = () => {
+    if (stage !== "sealed") return;
+
+    // Start background audio on tap if not already playing
+    if (!playing) {
+      toggle();
+    }
+
+    setStage("opening");
+
+    // Stage 2 transition lasts ~550ms before progressing smoothly into Stage 3 Hero Reveal
+    window.setTimeout(() => {
+      setStage("hero");
+    }, reduced ? 100 : 550);
   };
 
-  const skip = () => setScene(MARKS.length - 1);
+  const handleEnterSite = () => {
+    if (isLeaving) return;
+    setIsLeaving(true);
+
+    // Fade out overlay cleanly over 600ms, then notify parent layout that invitation is opened
+    window.setTimeout(() => {
+      if (onOpen) onOpen();
+    }, reduced ? 100 : 600);
+  };
 
   return (
-    <AnimatePresence>
-      {!leaving ? (
-        <motion.div
-          key="keepsake"
-          className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden px-6"
-          style={{ backgroundColor: "oklch(0.09 0.01 60)" }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.2, ease: EASE }}
-        >
-          {/* Scene 1 — the tabletop emerges out of the dark as light enters */}
-          <motion.img
-            src={silkTable}
-            alt=""
-            aria-hidden="true"
-            width={1536}
-            height={1024}
-            className="absolute inset-0 h-full w-full object-cover"
-            initial={{ opacity: 0, scale: 1.12, filter: "brightness(0.15) blur(6px)" }}
-            animate={{ opacity: 1, scale: 1, filter: "brightness(1) blur(0px)" }}
-            transition={{ duration: 5, ease: LINEN }}
-          />
-          <motion.div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(105deg, oklch(0.98 0.07 88 / 0.42), transparent 46%), radial-gradient(90% 70% at 50% 55%, transparent 30%, oklch(0.08 0.01 60 / 0.72))",
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 4.5, ease: LINEN }}
-            aria-hidden="true"
-          />
-          <div className="grain pointer-events-none absolute inset-0 opacity-30" aria-hidden="true" />
-          <Motes count={18} />
+    <motion.div
+      key="opening-overlay"
+      className="fixed inset-0 z-50 overflow-hidden font-sans select-none bg-fabric"
+      style={{
+        background:
+          "radial-gradient(ellipse 90% 80% at 50% 25%, #fcf7ed 0%, #f4ebda 55%, #e8dcc6 100%)",
+      }}
+      animate={{ opacity: isLeaving ? 0 : 1 }}
+      transition={{ duration: 0.6, ease: EASE_OUT_CUBIC }}
+    >
+      {/* Background Handcrafted Cotton Fabric Texture */}
+      <div className="bg-fabric absolute inset-0 opacity-40 pointer-events-none" />
 
-          <div className="relative w-full max-w-md" style={{ perspective: 1600 }}>
-            {/* Scene 6/7 — the invitation slides out and unfolds panel by panel */}
+      {/* Sound Toggle Button (Bottom-Right Corner with Hover Pulse Ring) */}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          toggle();
+        }}
+        aria-label={playing ? "Pause ambient audio" : "Play ambient audio"}
+        className="stamp group fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-gold/50 bg-[#f4ebda]/95 text-ink shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-gold hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] active:scale-95 cursor-pointer"
+      >
+        {/* Hover Pulse Ring */}
+        <span className="absolute -inset-1 rounded-full bg-gold/25 opacity-0 blur-sm transition-all duration-300 group-hover:opacity-100 pointer-events-none" />
+        <span className="absolute inset-0 rounded-full border border-gold/60 opacity-0 transition-all duration-500 group-hover:scale-150 group-hover:opacity-100 group-hover:animate-ping pointer-events-none" />
+
+        {playing ? (
+          <svg xmlns="http://www.w3.org/2000/svg" className="relative z-10 h-5 w-5 fill-current text-brass transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
+            <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM3 9v6h4l5 5V4L7 9H3z" />
+          </svg>
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" className="relative z-10 h-5 w-5 fill-current text-ink-soft transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
+            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73 4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+          </svg>
+        )}
+      </button>
+
+      {/* Stage 1 & Stage 2: Sealed Envelope Screen */}
+      {stage !== "hero" ? (
+        <div
+          onClick={handleSealTap}
+          className="absolute inset-0 flex cursor-pointer flex-col items-center justify-center px-4 z-20"
+        >
+          {/* Faint Envelope Fold Lines */}
+          <motion.svg
+            className="pointer-events-none absolute inset-0 h-full w-full"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+            animate={{ opacity: stage === "opening" ? 0 : 0.22 }}
+            transition={{ duration: 0.4 }}
+          >
+            <g stroke="oklch(0.55 0.08 65)" strokeWidth="1" strokeDasharray="4 3" fill="none">
+              {/* Top envelope flap crease V */}
+              <path d="M 0 0 L 50% 56% L 100% 0" />
+              {/* Side flap creases */}
+              <path d="M 0 0 L 50% 56% L 0 100%" />
+              <path d="M 100% 0 L 50% 56% L 100% 100%" />
+            </g>
+          </motion.svg>
+
+          {/* Stage 2 Light Flash Flare */}
+          {stage === "opening" ? (
             <motion.div
-              className="relative mx-auto w-[88%] origin-bottom"
-              initial={{ y: 90, opacity: 0, rotateX: 26, scale: 0.94 }}
-              animate={
-                at(6)
-                  ? { y: -34, opacity: 1, rotateX: 0, rotate: -0.6, scale: 1 }
-                  : at(5)
-                    ? { y: 18, opacity: 1, rotateX: 14, rotate: -1.4, scale: 0.97 }
-                    : { y: 90, opacity: 0, rotateX: 26, scale: 0.94 }
-              }
-              transition={{ duration: 2.4, ease: LINEN }}
-              style={{ transformPerspective: 1400, transformStyle: "preserve-3d" }}
-            >
-              {/* fold shadow while the panels open */}
-              <motion.div
-                className="pointer-events-none absolute inset-0 z-20"
+              className="pointer-events-none absolute inset-0 z-30"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 50%, rgba(255, 252, 245, 0.95) 0%, rgba(244, 235, 218, 0) 70%)",
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{ duration: 0.55, times: [0, 0.4, 1] }}
+            />
+          ) : null}
+
+          {/* Stage 1 & 2 Wax Seal Emblem */}
+          <motion.div
+            className="relative z-20 flex flex-col items-center justify-center text-center"
+            initial={{ scale: 1, opacity: 1 }}
+            animate={
+              stage === "opening"
+                ? { scale: reduced ? 1 : 1.08, opacity: 0 }
+                : { scale: reduced ? 1 : [1, 1.025, 1] }
+            }
+            transition={
+              stage === "opening"
+                ? { duration: 0.4, ease: EASE_OUT_CUBIC }
+                : { duration: 3.2, repeat: Infinity, ease: "easeInOut" }
+            }
+            whileHover={{ scale: stage === "sealed" && !reduced ? 1.04 : 1 }}
+            whileTap={{ scale: stage === "sealed" && !reduced ? 0.96 : 1 }}
+          >
+            {/* Embossed Wax Seal Disc */}
+            <div className="relative flex items-center justify-center">
+              <div
+                className="absolute -inset-4 rounded-full blur-md opacity-40"
+                style={{
+                  background: "radial-gradient(circle, rgba(201, 166, 107, 0.6) 0%, transparent 70%)",
+                }}
+              />
+
+              <div
+                className="relative h-28 w-28 sm:h-32 sm:w-32 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300"
                 style={{
                   background:
-                    "linear-gradient(90deg, oklch(0.2 0.02 60 / 0.5), transparent 22%, transparent 78%, oklch(0.2 0.02 60 / 0.5))",
+                    "radial-gradient(circle at 35% 30%, #e8ba6c 0%, #c9a66b 35%, #9b753b 70%, #64471c 100%)",
+                  boxShadow: `
+                    0 20px 40px -10px rgba(60, 42, 18, 0.45),
+                    0 8px 18px -4px rgba(60, 42, 18, 0.3),
+                    inset 0 3px 6px rgba(255, 246, 215, 0.7),
+                    inset 0 -3px 8px rgba(45, 28, 8, 0.5)
+                  `,
+                  border: "1px solid rgba(255, 240, 200, 0.45)",
                 }}
-                animate={{ opacity: at(7) ? 0 : 1 }}
-                transition={{ duration: 2, ease: LINEN }}
-                aria-hidden="true"
-              />
-              <motion.div
-                className="relative"
-                initial={{ scaleX: 0.42 }}
-                animate={{ scaleX: at(6) ? 1 : 0.42 }}
-                transition={{ duration: 2.2, ease: LINEN }}
               >
-                <div className="deckle-edge absolute inset-0" aria-hidden="true" />
-                <img
-                  src={floral}
-                  alt=""
-                  aria-hidden="true"
-                  width={1024}
-                  height={1024}
-                  className="pointer-events-none absolute -top-10 -left-10 w-40 opacity-0 mix-blend-multiply"
-                  style={{ opacity: at(7) ? 0.4 : 0, transition: "opacity 2.4s ease" }}
-                />
-                <PaintedBorder on={at(7)} />
-
-                <div className="grain relative px-8 py-12 text-center">
-                  {/* Scene 9 — the names are written, not faded */}
-                  <motion.h2
-                    className="script foil-text text-5xl leading-[1.15] sm:text-6xl"
-                    initial={{ clipPath: "inset(0 100% 0 0)", filter: "blur(3px)" }}
-                    animate={
-                      at(8)
-                        ? { clipPath: "inset(0 0% 0 0)", filter: "blur(0px)" }
-                        : { clipPath: "inset(0 100% 0 0)" }
-                    }
-                    transition={{ duration: 3.2, ease: "easeInOut" }}
+                {/* Dashed Inner Rim */}
+                <div className="h-[80%] w-[80%] rounded-full border border-dashed border-[#fff4d6]/60 flex items-center justify-center">
+                  <span
+                    className="font-[family-name:var(--font-script)] text-3xl sm:text-4xl tracking-wider select-none text-[#fff8ed]"
+                    style={{
+                      textShadow: "0 1px 3px rgba(50, 32, 10, 0.8), 0 0 12px rgba(255, 240, 200, 0.5)",
+                    }}
                   >
-                    {couple.bride}
-                    <span className="block text-3xl text-brass/70">&</span>
-                    {couple.groom}
-                  </motion.h2>
-
-                  {/* Scene 10 — details letterpress in, line by line */}
-                  {[
-                    "We joyfully invite you",
-                    couple.date,
-                    invitation.venue,
-                    invitation.time,
-                  ].map((line, i) => (
-                    <motion.p
-                      key={line}
-                      className={
-                        i === 0
-                          ? "letterpress mt-6 font-[family-name:var(--font-roman)] text-[0.7rem] tracking-[0.34em] text-ink-soft uppercase"
-                          : "letterpress mt-2 font-[family-name:var(--font-roman)] text-[0.66rem] tracking-[0.24em] text-ink-soft/85 uppercase"
-                      }
-                      initial={{ opacity: 0, y: 6, filter: "blur(4px)" }}
-                      animate={at(9) ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
-                      transition={{ duration: 1.6, ease: LINEN, delay: i * 0.5 }}
-                    >
-                      {line}
-                    </motion.p>
-                  ))}
-
-                  {/* Scene 11 — an embossed part of the paper, not a button */}
-                  <motion.button
-                    type="button"
-                    onClick={finish}
-                    className="stamp group mt-9 px-7 py-3 text-[0.7rem] text-ink transition-[transform,box-shadow] duration-500 hover:-translate-y-[3px] hover:shadow-[0_18px_30px_-18px_oklch(0_0_0/0.6)]"
-                    initial={{ opacity: 0 }}
-                    animate={at(10) ? { opacity: 1 } : {}}
-                    transition={{ duration: 1.6, ease: LINEN }}
-                  >
-                    <span className="foil-text">Open Invitation</span>
-                  </motion.button>
+                    {monogram}
+                  </span>
                 </div>
-              </motion.div>
+              </div>
+            </div>
+
+            {/* Tagline Below Wax Seal */}
+            <motion.div
+              className="mt-6 flex flex-col items-center"
+              animate={stage === "opening" ? { opacity: 0, y: -10 } : { opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <p className="font-[family-name:var(--font-script)] text-2xl sm:text-3xl text-ink leading-tight">
+                {tagline.split("\n").map((line, idx) => (
+                  <span key={idx} className="block">
+                    {line}
+                  </span>
+                ))}
+              </p>
+
+              <p className="letterpress mt-3 font-[family-name:var(--font-roman)] text-[0.62rem] tracking-[0.32em] text-brass uppercase">
+                Tap anywhere to open
+              </p>
+            </motion.div>
+          </motion.div>
+        </div>
+      ) : null}
+
+      {/* Stage 3: Hero Reveal Screen */}
+      {stage === "hero" ? (
+        <motion.div
+          key="hero-reveal-screen"
+          className="absolute inset-0 flex flex-col items-center justify-between overflow-y-auto px-6 py-10 z-20"
+          initial={{ opacity: 0, scale: reduced ? 1 : 0.97 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: EASE_OUT_CUBIC }}
+        >
+          {/* 3D Depth Living Invitation Backdrop (Far Sky, Mid Lake Palace, Bleeding Foreground Botanicals) */}
+          <HeroParallaxBackdrop heroIllustrationSrc={heroIllustrationSrc} />
+
+          <div className="relative z-10 mx-auto flex w-full max-w-2xl flex-col items-center text-center my-auto py-8">
+            {/* Soft Radial Scrim Card directly behind Typography for 3D Contrast Pop */}
+            <div className="absolute inset-x-2 -inset-y-4 rounded-3xl bg-radial from-[#fffcf5]/90 via-[#f4ebda]/75 to-transparent blur-md pointer-events-none -z-10" />
+
+            {/* 1. Open Calligraphic Personalized Guest Greeting (No Pill Container) */}
+            <motion.div
+              className="mb-3 flex flex-col items-center w-full max-w-lg"
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.05, ease: EASE_OUT_CUBIC }}
+            >
+              <p className="font-[family-name:var(--font-roman)] text-[0.68rem] tracking-[0.4em] text-brass uppercase font-semibold mb-1">
+                Cordially Welcoming
+              </p>
+
+              <h2 className="font-[family-name:var(--font-script)] text-3xl sm:text-5xl text-[#2c1c0e] font-normal tracking-wide my-1 text-center drop-shadow-[0_2px_12px_rgba(244,235,218,0.95)] filter drop-shadow-[0_2px_8px_rgba(212,175,55,0.4)]">
+                Dear <span className="text-[#8a5d19] font-serif italic font-medium drop-shadow-[0_2px_10px_rgba(212,175,55,0.5)]">{guestName}</span>
+              </h2>
+
+              <svg viewBox="0 0 300 24" className="w-full text-brass mt-2 opacity-80" fill="none" stroke="currentColor" strokeWidth="1">
+                <path d="M 10 12 Q 75 22, 150 12 Q 225 22, 290 12" strokeDasharray="3 2" opacity="0.6" />
+                <circle cx="150" cy="12" r="3" fill="currentColor" />
+                <circle cx="75" cy="16" r="2" fill="currentColor" opacity="0.7" />
+                <circle cx="225" cy="16" r="2" fill="currentColor" opacity="0.7" />
+                <path d="M 144 12 C 138 4, 132 4, 126 10" />
+                <path d="M 156 12 C 162 4, 168 4, 174 10" />
+              </svg>
             </motion.div>
 
-            {/* Scenes 2–5 — the box, its ribbon, its seal and its lid */}
-            <div className="relative -mt-10">
-              <motion.div
-                className="relative"
-                initial={{ y: 120, opacity: 0, scale: 0.92 }}
-                animate={at(1) ? { y: 0, opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 2.6, ease: LINEN }}
-              >
-                {/* open box interior, revealed as the lid lifts */}
-                <div
-                  className="h-44 rounded-[3px] border border-brass/50 shadow-[0_40px_70px_-34px_oklch(0_0_0/0.85)]"
-                  style={{
-                    background:
-                      "linear-gradient(180deg, oklch(0.34 0.04 30) 0%, oklch(0.5 0.05 30) 16%, oklch(0.78 0.05 28) 55%, oklch(0.62 0.05 28) 100%)",
-                    boxShadow: "inset 0 14px 22px -12px oklch(0 0 0 / 0.85)",
-                  }}
-                />
-                {/* the lid itself */}
-                <motion.img
-                  src={boxLid}
-                  alt=""
-                  aria-hidden="true"
-                  width={1024}
-                  height={768}
-                  className="absolute inset-x-0 top-0 h-44 w-full origin-bottom object-cover"
-                  style={{ transformPerspective: 1200 }}
-                  animate={
-                    at(4)
-                      ? { rotateX: -104, y: -8, opacity: 0.9 }
-                      : { rotateX: 0, y: 0, opacity: 1 }
-                  }
-                  transition={{ duration: 2.4, ease: LINEN }}
-                />
-                {/* light spilling into the open box */}
-                <motion.div
-                  className="pointer-events-none absolute inset-x-6 top-2 h-24"
-                  style={{
-                    background:
-                      "radial-gradient(60% 100% at 50% 0%, oklch(0.98 0.08 88 / 0.6), transparent 70%)",
-                  }}
-                  animate={{ opacity: at(4) ? 1 : 0 }}
-                  transition={{ duration: 2, ease: LINEN }}
-                  aria-hidden="true"
-                />
-
-                {/* raw silk ribbon, loosening and falling */}
-                <motion.div
-                  className="absolute top-0 bottom-0 left-1/2 w-9 -translate-x-1/2 origin-top"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, oklch(0.7 0.06 24 / 0.5), oklch(0.82 0.06 26 / 0.9), oklch(0.66 0.06 22 / 0.55))",
-                    boxShadow: "0 2px 10px -4px oklch(0 0 0 / 0.6)",
-                  }}
-                  animate={
-                    at(2)
-                      ? { scaleY: 0.15, y: 60, rotate: 5, opacity: 0, skewX: 6 }
-                      : { scaleY: 1, y: 0, opacity: 1 }
-                  }
-                  transition={{ duration: 2.6, ease: LINEN }}
-                  aria-hidden="true"
-                />
-                {/* gold thread */}
-                <motion.div
-                  className="absolute top-0 bottom-0 left-1/2 w-px -translate-x-1/2"
-                  style={{ background: "var(--gold)", opacity: 0.7 }}
-                  animate={at(2) ? { opacity: 0, y: 50 } : {}}
-                  transition={{ duration: 2.2, ease: LINEN }}
-                  aria-hidden="true"
-                />
-                {/* wax seal */}
-                <motion.div
-                  className="absolute top-8 left-1/2 h-16 w-16 -translate-x-1/2"
-                  animate={at(4) ? { opacity: 0 } : { opacity: 1 }}
-                  transition={{ duration: 1.6, delay: 0.4 }}
-                >
-                  <WaxSeal broken={at(3)} />
-                </motion.div>
-              </motion.div>
-            </div>
-          </div>
-
-          {!at(10) ? (
-            <motion.button
-              type="button"
-              onClick={skip}
-              className="absolute right-6 bottom-6 font-[family-name:var(--font-roman)] text-[0.58rem] tracking-[0.35em] text-champagne/55 uppercase transition-colors hover:text-champagne"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.6, duration: 1.2 }}
+            {/* 2. Eyebrow Text */}
+            <motion.p
+              className="eyebrow letterpress text-[0.68rem] tracking-[0.42em] text-brass uppercase"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.15, ease: EASE_OUT_CUBIC }}
             >
-              Skip
-            </motion.button>
-          ) : null}
+              {eyebrowText}
+            </motion.p>
+
+            {/* 3. Stacked Couple Names with Typography Pop & Opulent Calligraphy Ampersand */}
+            <motion.div
+              className="mt-4 flex flex-col items-center"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.25, ease: EASE_OUT_CUBIC }}
+            >
+              <h1 className="font-[family-name:var(--font-display)] text-5xl sm:text-7xl font-normal text-[#2c1c0e] tracking-tight drop-shadow-[0_4px_16px_rgba(244,235,218,0.95)] filter drop-shadow-[0_2px_4px_rgba(44,28,14,0.18)]">
+                {brideName}
+              </h1>
+              {/* Opulent Calligraphy Flourish Ampersand */}
+              <span className="font-[family-name:var(--font-script)] text-5xl sm:text-6xl text-brass italic font-serif my-0.5 drop-shadow-[0_2px_8px_rgba(212,175,55,0.45)]">
+                &amp;
+              </span>
+              <h1 className="font-[family-name:var(--font-display)] text-5xl sm:text-7xl font-normal text-[#2c1c0e] tracking-tight drop-shadow-[0_4px_16px_rgba(244,235,218,0.95)] filter drop-shadow-[0_2px_4px_rgba(44,28,14,0.18)]">
+                {groomName}
+              </h1>
+            </motion.div>
+
+            {/* 4. Numeric Date, Rajasthani Lotus Motif & Venue Details */}
+            <motion.div
+              className="mt-6 flex flex-col items-center gap-1.5"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.35, ease: EASE_OUT_CUBIC }}
+            >
+              <p className="letterpress font-[family-name:var(--font-roman)] text-xs sm:text-sm tracking-[0.32em] text-[#2c1c0e] font-semibold uppercase">
+                SATURDAY • 14.02.2027
+              </p>
+
+              {/* Decorative Rajasthani Lotus Motif Divider */}
+              <div className="my-1.5 flex items-center justify-center gap-3 text-brass/80">
+                <span className="h-[1px] w-10 bg-gradient-to-r from-transparent to-brass/70" />
+                <Motif kind="lotus" className="h-6 w-6 text-brass transform hover:rotate-12 transition-transform duration-300" />
+                <span className="h-[1px] w-10 bg-gradient-to-l from-transparent to-brass/70" />
+              </div>
+
+              <p className="font-[family-name:var(--font-roman)] text-[0.72rem] tracking-[0.22em] text-brass uppercase font-medium">
+                {invitation.venue} • {couple.city}
+              </p>
+            </motion.div>
+
+            {/* 5. Ultra-Premium Royal Gold Capsule CTA Plaque */}
+            <motion.div
+              className="mt-10"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.45, ease: EASE_OUT_CUBIC }}
+            >
+              <style>{`
+                @keyframes ctaSheenSweep {
+                  0%, 70% { transform: translateX(-140%) rotate(25deg); opacity: 0; }
+                  76% { opacity: 0.85; }
+                  86%, 100% { transform: translateX(300%) rotate(25deg); opacity: 0; }
+                }
+                @keyframes goldAuraGlow {
+                  0%, 100% { box-shadow: 0 12px 35px -6px rgba(212, 175, 55, 0.48), 0 4px 12px rgba(60, 40, 15, 0.2); }
+                  50% { box-shadow: 0 18px 45px -4px rgba(212, 175, 55, 0.72), 0 6px 18px rgba(60, 40, 15, 0.28); }
+                }
+              `}</style>
+              <button
+                type="button"
+                onClick={handleEnterSite}
+                className="group relative overflow-hidden rounded-full px-12 py-5 text-xs sm:text-sm tracking-[0.36em] uppercase font-[family-name:var(--font-roman)] text-[#241508] font-bold transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer z-30"
+                style={{
+                  background: "linear-gradient(135deg, #fffdf8 0%, #fef5e0 45%, #f7eaad 85%, #faf2d2 100%)",
+                  border: "1.5px solid rgba(212, 175, 55, 0.9)",
+                  animation: reduced ? "none" : "goldAuraGlow 4s ease-in-out infinite",
+                }}
+              >
+                {/* Inner Pill Gold Filigree Ring */}
+                <span className="absolute inset-1.5 rounded-full border border-[#c9a66b]/60 pointer-events-none transition-colors duration-300 group-hover:border-[#d4af37]" />
+
+                {/* 3.8s Periodic Metallic Light Sheen Sweep */}
+                <span
+                  className="absolute inset-y-0 -left-1/3 w-2/3 bg-gradient-to-r from-transparent via-white/90 to-transparent pointer-events-none"
+                  style={{
+                    animation: reduced ? "none" : "ctaSheenSweep 3.8s ease-in-out infinite",
+                  }}
+                />
+
+                {/* Content: Gold Wax Seal Medallion + Letterpressed Royal Text + Forward Arrow */}
+                <span className="relative z-10 flex items-center justify-center gap-3 text-[#241508] font-bold">
+                  <span className="flex items-center justify-center h-5 w-5 rounded-full bg-gradient-to-br from-[#d4af37] via-[#aa771c] to-[#784e10] text-[#fffcf5] text-[0.68rem] shadow-sm font-serif italic">
+                    ❦
+                  </span>
+                  <span className="drop-shadow-[0_1px_1px_rgba(255,255,255,0.85)]">
+                    ENTER INVITATION
+                  </span>
+                  <span className="text-[#b8860b] text-base font-serif transition-transform duration-300 group-hover:translate-x-1">
+                    →
+                  </span>
+                </span>
+              </button>
+            </motion.div>
+          </div>
         </motion.div>
       ) : null}
-
-      {/* Scene 11 — the paper expands until it becomes the page */}
-      {leaving && !reduced ? (
-        <motion.div
-          key="into"
-          className="pointer-events-none fixed inset-0 z-50"
-          style={{
-            background:
-              "radial-gradient(130% 100% at 50% 45%, oklch(0.975 0.014 86), oklch(0.925 0.026 80))",
-          }}
-          initial={{ opacity: 0, scale: 0.6, borderRadius: 24 }}
-          animate={{ opacity: 1, scale: 1, borderRadius: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.4, ease: LINEN }}
-        />
-      ) : null}
-    </AnimatePresence>
+    </motion.div>
   );
 }

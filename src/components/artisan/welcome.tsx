@@ -3,6 +3,8 @@ import type { PointerEvent } from "react";
 import { couple } from "@/data/wedding";
 import floral from "@/assets/floral-spray.png";
 import { InkRule, Motes, Motif } from "./atoms";
+import { FlyingBirds } from "./flying-birds";
+import { GoldenSparkles } from "./golden-sparkles";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -32,6 +34,8 @@ export function Welcome() {
       }}
     >
       <div className="grain absolute inset-0" aria-hidden="true" />
+      <FlyingBirds density="low" />
+      <GoldenSparkles density="medium" />
       <Motes count={10} />
       <img
         src={floral}

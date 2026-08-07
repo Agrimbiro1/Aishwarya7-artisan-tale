@@ -200,6 +200,21 @@ export function Motif({
         <path d="M38 26 C 36 16, 42 12, 48 14" />
       </>
     ),
+    lotus: (
+      <>
+        <path d="M32 12 C 24 24, 24 40, 32 52 C 40 40, 40 24, 32 12 Z" fill="currentColor" fillOpacity="0.2" />
+        <path d="M32 52 C 14 44, 8 28, 14 18 C 24 28, 28 42, 32 52 Z" fill="currentColor" fillOpacity="0.15" />
+        <path d="M32 52 C 50 44, 56 28, 50 18 C 40 28, 36 42, 32 52 Z" fill="currentColor" fillOpacity="0.15" />
+        <path d="M12 48 C 24 56, 40 56, 52 48" strokeWidth="1.2" />
+      </>
+    ),
+    diya: (
+      <>
+        <path d="M32 8 C 30 18, 24 24, 32 30 C 40 24, 34 18, 32 8 Z" fill="currentColor" fillOpacity="0.3" />
+        <path d="M10 32 C 10 50, 54 50, 54 32 C 42 38, 22 38, 10 32 Z" fill="currentColor" fillOpacity="0.2" />
+        <path d="M16 46 C 24 54, 40 54, 48 46" strokeWidth="1.2" />
+      </>
+    ),
   };
   return (
     <svg viewBox="0 0 64 64" className={className} style={style} fill="none" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" aria-hidden="true">
