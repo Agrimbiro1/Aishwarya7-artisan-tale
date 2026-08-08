@@ -62,6 +62,8 @@ export function Welcome({
         aria-hidden="true"
       />
 
+
+
       <FlyingBirds density="low" />
       <GoldenSparkles density="medium" />
       <Motes count={14} />
