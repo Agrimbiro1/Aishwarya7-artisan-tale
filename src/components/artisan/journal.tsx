@@ -4,7 +4,7 @@ import { Reveal, SectionTitle } from "./atoms";
 
 export function Journal() {
   return (
-    <section id="travel" className="relative overflow-hidden px-5 py-28" style={{ backgroundColor: "rgba(245, 228, 228, 0.45)" }}>
+    <section id="travel" className="relative overflow-hidden px-5 py-28" style={{ backgroundColor: "transparent" }}>
       <div className="grain absolute inset-0" aria-hidden="true" />
       <div className="relative mx-auto max-w-5xl">
         <SectionTitle eyebrow="Carried in a coat pocket" title="Travel & stay" script="The journal" />

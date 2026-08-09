@@ -45,11 +45,7 @@ export function Welcome({
     <section
       id="welcome"
       onPointerMove={track}
-      className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-16 sm:py-24 bg-fabric bg-[#f4ebda]"
-      style={{
-        background:
-          "radial-gradient(130% 110% at 50% 15%, #fffef9 0%, #f4ebda 50%, #e7d5bd 100%)",
-      }}
+      className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-16 sm:py-24"
     >
       <div className="grain absolute inset-0 opacity-70" aria-hidden="true" />
       

@@ -250,11 +250,7 @@ export function InvitationCard({
   return (
     <section
       id="invitation"
-      className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24 bg-fabric bg-[#f4ebda]"
-      style={{
-        background:
-          "radial-gradient(130% 110% at 50% 15%, #fffef9 0%, #f4ebda 50%, #e7d5bd 100%)",
-      }}
+      className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24"
       onMouseMove={handleStageMouseMove}
       onMouseLeave={() => setStageMouse((prev) => ({ ...prev, active: false }))}
     >

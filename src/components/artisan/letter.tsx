@@ -9,7 +9,7 @@ export function Letter() {
   const [open, setOpen] = useState(false);
 
   return (
-    <section id="contact" className="relative overflow-hidden px-5 py-28" style={{ backgroundColor: "rgba(248, 236, 233, 0.55)" }}>
+    <section id="contact" className="relative overflow-hidden px-5 py-28" style={{ backgroundColor: "transparent" }}>
       <div className="grain absolute inset-0" aria-hidden="true" />
       <img src={floral} alt="" aria-hidden="true" loading="lazy" width={1024} height={1024} className="pointer-events-none absolute -bottom-16 -left-20 w-80 opacity-25 mix-blend-multiply" />
 

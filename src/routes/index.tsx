@@ -5,7 +5,7 @@ import { PaperBackdrop } from "@/components/artisan/paper-backdrop";
 import { Opening } from "@/components/artisan/opening";
 import { Welcome } from "@/components/artisan/welcome";
 import { InvitationCard } from "@/components/artisan/invitation-card";
-import { Booklet } from "@/components/artisan/booklet";
+import { OrderOfEvents } from "@/components/artisan/order-of-events";
 import { Scrapbook } from "@/components/artisan/scrapbook";
 import { FamilyTree } from "@/components/artisan/family-tree";
 import { Journal } from "@/components/artisan/journal";
@@ -84,7 +84,7 @@ function Index() {
 
         <Welcome />
         <InvitationCard />
-        <Booklet />
+        <OrderOfEvents />
         <Scrapbook />
         <FamilyTree />
         <Journal />

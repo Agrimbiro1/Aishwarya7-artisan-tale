@@ -7,10 +7,6 @@ export function Closing() {
   return (
     <footer
       className="relative overflow-hidden px-5 py-32 text-center"
-      style={{
-        background:
-          "radial-gradient(120% 100% at 50% 100%, rgba(240, 219, 217, 0.6), rgba(251, 239, 239, 0.25))",
-      }}
     >
       <div className="grain absolute inset-0" aria-hidden="true" />
       <Motes count={8} petal />

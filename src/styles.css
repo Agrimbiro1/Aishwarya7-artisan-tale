@@ -195,29 +195,12 @@
  */
 @utility bg-fabric {
   position: relative;
-  background-color: var(--ivory, #f4ebda);
+  background-color: transparent;
 }
 
 @utility bg-texture {
   position: relative;
-  background-color: var(--ivory, #f4ebda);
-}
-
-.bg-fabric::before,
-.bg-texture::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-color: var(--ivory, #f4ebda);
-  background-image:
-    var(--cardstock-vignette),
-    var(--woven-linen-pattern),
-    var(--cotton-texture-svg);
-  background-size: cover, 6px 6px, 6px 6px, 300px 300px;
-  mix-blend-mode: multiply;
-  opacity: calc(var(--texture-opacity, 0.04) * 20);
+  background-color: transparent;
 }
 
 @utility paper {
