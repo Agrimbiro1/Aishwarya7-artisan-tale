@@ -390,6 +390,10 @@
     linear-gradient(168deg, #f7eee0 0%, #f4ebda 45%, #f2e6d3 100%);
 }
 
+@utility deckle-edge {
+  filter: url(#deckleEdge);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
