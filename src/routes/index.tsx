@@ -9,7 +9,7 @@ import { OrderOfEvents } from "@/components/artisan/order-of-events";
 import { Scrapbook } from "@/components/artisan/scrapbook";
 import { FamilyTree } from "@/components/artisan/family-tree";
 import { Journal } from "@/components/artisan/journal";
-import { Letter } from "@/components/artisan/letter";
+import { ConciergeDesk } from "@/components/artisan/concierge-desk";
 import { Closing } from "@/components/artisan/closing";
 import { useAmbience } from "@/components/artisan/use-ambience";
 
@@ -88,7 +88,7 @@ function Index() {
         <Scrapbook />
         <FamilyTree />
         <Journal />
-        <Letter />
+        <ConciergeDesk />
         <Closing />
       </main>
 

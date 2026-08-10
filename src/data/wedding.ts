@@ -108,8 +108,8 @@ export const travel = [
 ];
 
 export const contacts = [
-  { label: "Call", value: "+91 98290 44120", href: "tel:+919829044120" },
-  { label: "WhatsApp", value: "+91 98290 44120", href: "https://wa.me/919829044120" },
-  { label: "Write", value: "aanyaandvihaan@gmail.com", href: "mailto:aanyaandvihaan@gmail.com" },
-  { label: "Planner", value: "Studio Marigold — Tara", href: "tel:+919810022331" },
+  { label: "Call", value: "+91 98290 44120", href: "tel:+919829044120", icon: "phone" },
+  { label: "WhatsApp", value: "+91 98290 44120", href: "https://wa.me/919829044120", icon: "chat" },
+  { label: "Write", value: "aanyaandvihaan@gmail.com", href: "mailto:aanyaandvihaan@gmail.com", icon: "envelope" },
+  { label: "Planner", value: "Studio Marigold — Tara", href: "tel:+919810022331", icon: "calendar" },
 ];

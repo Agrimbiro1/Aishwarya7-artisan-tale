@@ -1,329 +1,450 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
-import { family } from "@/data/wedding";
-import tree from "@/assets/watercolor-tree.png";
-import { SectionTitle } from "./atoms";
+import brideFamilyPic from "@/assets/bride-family.jpg";
+import groomFamilyPic from "@/assets/groom-family.jpg";
+import m3 from "@/assets/memory-3.jpg";
+import m5 from "@/assets/memory-5.jpg";
+import m6 from "@/assets/memory-6.jpg";
+import m7 from "@/assets/memory-7.jpg";
+import { Motif, SectionTitle } from "./atoms";
 
-const defaultPerson = { name: "", relation: "", note: "" };
+export interface FamilyMember {
+  name: string;
+  relation: string;
+  monogram: string;
+  photo?: string;
+  quote?: string;
+}
 
-// Categorize family members into explicit generational tiers with non-null guarantees
-const grandmother = family.find((f) => f.relation.includes("Grandmother")) ?? family[2] ?? defaultPerson;
-const brideParents = family.find((f) => f.relation.includes("Parents of the Bride")) ?? family[0] ?? defaultPerson;
-const groomParents = family.find((f) => f.relation.includes("Parents of the Groom")) ?? family[1] ?? defaultPerson;
-const brideSibling = family.find((f) => f.relation.includes("Brother of the Bride")) ?? family[3] ?? defaultPerson;
-const groomSibling = family.find((f) => f.relation.includes("Sister of the Groom")) ?? family[4] ?? defaultPerson;
-const littleOnes = family.find((f) => f.relation.includes("Little Ones")) ?? family[5] ?? defaultPerson;
+export interface FamilyData {
+  side: "bride" | "groom";
+  title: string;
+  accentColor: string;
+  badgeBg: string;
+  cardWash: string;
+  cardShadow: string;
+  btnStyle: string;
+  locketBg: string;
+  rotation: string;
+  parents: {
+    names: string;
+    relation: string;
+    photo: string;
+    quote: string;
+  };
+  members: FamilyMember[];
+}
 
-type FamilySide = "bride" | "groom" | "matriarch" | "center";
-
-// Helper to determine color-coding side, custom label color & monogram initial
-const getFamilyMetadata = (relation: string, name: string) => {
-  if (relation.includes("Grandmother")) {
-    return { side: "matriarch" as FamilySide, monogram: "KD", labelColor: "text-[#9e7828]" };
-  }
-  if (relation.includes("Bride")) {
-    const monogram = name.includes("Rajeev") ? "RM" : "IM";
-    return { side: "bride" as FamilySide, monogram, labelColor: "text-[#a85a48]" };
-  }
-  if (relation.includes("Groom")) {
-    const monogram = name.includes("Anand") ? "AR" : "RR";
-    return { side: "groom" as FamilySide, monogram, labelColor: "text-[#586b46]" };
-  }
-  return { side: "center" as FamilySide, monogram: "K&N", labelColor: "text-[#8c6c23]" };
+// STRUCTURED FAMILY DATA PER SIDE
+export const brideFamilyData: FamilyData = {
+  side: "bride",
+  title: "The Bride's Family",
+  accentColor: "text-[#a85a48]",
+  badgeBg: "bg-[#fcf2ef]/90 border-[#e8bfa0]/60",
+  cardWash: "bg-gradient-to-b from-[#fffdfa] via-[#fcf2ef]/95 to-[#f9e5e0]/90 border-[#e8bfa0]/80",
+  cardShadow: "shadow-[0_24px_55px_-12px_rgba(168,90,72,0.18),0_6px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_32px_70px_-10px_rgba(168,90,72,0.28)]",
+  btnStyle: "border-[#a85a48]/60 text-[#a85a48] hover:bg-[#a85a48] hover:text-[#fffdf9]",
+  locketBg: "bg-[#faf0ec] border-[#e8bfa0]/40 text-[#a85a48]",
+  rotation: "-rotate-[1.8deg]",
+  parents: {
+    names: "Rajeev & Sudha Malhotra",
+    relation: "PARENTS OF THE BRIDE",
+    photo: brideFamilyPic,
+    quote: "Guiding with love, wisdom, and timeless warmth through every step of life.",
+  },
+  members: [
+    {
+      name: "Dadi Kamla Devi",
+      relation: "GRANDMOTHER",
+      monogram: "KD",
+      photo: m3,
+      quote: "The eternal blessing at the root of our family tree.",
+    },
+    {
+      name: "Ishaan Malhotra",
+      relation: "BROTHER OF THE BRIDE",
+      monogram: "IM",
+      photo: m5,
+      quote: "Partner in laughter, forever protector and friend.",
+    },
+    {
+      name: "Kabir & Naina",
+      relation: "THE LITTLE ONES",
+      monogram: "K&N",
+      photo: m7,
+      quote: "Bringing endless joy, giggles, and innocent light.",
+    },
+  ],
 };
 
-export function FamilyTree() {
-  const reduced = useReducedMotion();
-  const [isExpanded, setIsExpanded] = useState(false);
+export const groomFamilyData: FamilyData = {
+  side: "groom",
+  title: "The Groom's Family",
+  accentColor: "text-[#586b46]",
+  badgeBg: "bg-[#f2f5ec]/90 border-[#c0d0b0]/60",
+  cardWash: "bg-gradient-to-b from-[#fffdfa] via-[#f2f5ec]/95 to-[#e6ece0]/90 border-[#c0d0b0]/80",
+  cardShadow: "shadow-[0_24px_55px_-12px_rgba(88,107,70,0.18),0_6px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_32px_70px_-10px_rgba(88,107,70,0.28)]",
+  btnStyle: "border-[#586b46]/60 text-[#586b46] hover:bg-[#586b46] hover:text-[#fffdf9]",
+  locketBg: "bg-[#f2f6ee] border-[#c0d0b0]/40 text-[#586b46]",
+  rotation: "rotate-[1.8deg]",
+  parents: {
+    names: "Anand & Meera Rathore",
+    relation: "PARENTS OF THE GROOM",
+    photo: groomFamilyPic,
+    quote: "Pillars of strength, grace, and unwavering ancestral devotion.",
+  },
+  members: [
+    {
+      name: "Dadi Kamla Devi",
+      relation: "GRANDMOTHER",
+      monogram: "KD",
+      photo: m3,
+      quote: "The eternal blessing at the root of our family tree.",
+    },
+    {
+      name: "Riya Rathore",
+      relation: "SISTER OF THE GROOM",
+      monogram: "RR",
+      photo: m6,
+      quote: "Keeper of childhood secrets and joyful celebrations.",
+    },
+    {
+      name: "Kabir & Naina",
+      relation: "THE LITTLE ONES",
+      monogram: "K&N",
+      photo: m7,
+      quote: "Bringing endless joy, giggles, and innocent light.",
+    },
+  ],
+};
 
+export function FamilySection() {
   return (
     <section id="family" className="relative overflow-hidden px-4 py-24 sm:px-8 sm:py-36" style={{ backgroundColor: "transparent" }}>
       <div className="grain absolute inset-0 opacity-75" aria-hidden="true" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[34rem] w-[34rem] rounded-full bg-[#b89138]/10 blur-3xl -z-10" />
 
-      {/* Main Watercolor Tree Illustration (Enriched Visibility & Radial Warmth) */}
-      <div className="pointer-events-none absolute inset-x-0 top-8 mx-auto w-full max-w-5xl flex justify-center opacity-45 mix-blend-multiply">
-        <img
-          src={tree}
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          width={1536}
-          height={1024}
-          className="w-[min(68rem,100%)] object-contain"
-        />
-      </div>
-
-      <div className="pointer-events-none absolute left-1/2 top-40 -translate-x-1/2 h-[30rem] w-[30rem] rounded-full bg-[#b89138]/12 blur-3xl -z-10" />
-
-      <div className="relative mx-auto max-w-5xl z-10">
-        {/* Section Header */}
-        <div className="text-center mb-14 sm:mb-16">
-          <SectionTitle eyebrow="Two families, one root" title="The Family Tree" script="Those who made us" />
+      <div className="relative mx-auto max-w-6xl z-10">
+        {/* PART 1: SECTION HEADER */}
+        <div className="text-center mb-14 sm:mb-20">
+          <SectionTitle eyebrow="TOGETHER WITH THEIR FAMILIES" title="The Royal Court" script="Those who raised us" />
         </div>
 
-        {/* Generational Tree Structure Container */}
-        <div className="relative flex flex-col items-center">
-          {/* Animated Connecting Branch SVG Network (Desktop & Tablet) */}
-          <svg className="hidden md:block absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible" fill="none">
-            <defs>
-              <linearGradient id="treeBranchGold" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#b89138" stopOpacity="0.95" />
-                <stop offset="50%" stopColor="#8c6c23" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="#b89138" stopOpacity="0.95" />
-              </linearGradient>
-            </defs>
-
-            {/* Trunk -> Tier 1 (Grandmother Card Top Center) */}
-            <motion.path
-              d="M 500, -10 L 500, 15"
-              stroke="url(#treeBranchGold)"
-              strokeWidth="2.5"
-              strokeDasharray="8 5"
-              initial={{ pathLength: reduced ? 1 : 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: reduced ? 0 : 0.8, ease: "easeOut" }}
-            />
-
-            {/* Tier 1 -> Tier 2 Branch Split (Symmetric Curves Directly to Parents' Card Tops) */}
-            <motion.path
-              d="M 500, 195 C 500, 235 250, 235 250, 275"
-              stroke="url(#treeBranchGold)"
-              strokeWidth="2.5"
-              strokeDasharray="8 5"
-              initial={{ pathLength: reduced ? 1 : 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: reduced ? 0 : 1.2, delay: 0.3, ease: "easeOut" }}
-            />
-            <motion.path
-              d="M 500, 195 C 500, 235 750, 235 750, 275"
-              stroke="url(#treeBranchGold)"
-              strokeWidth="2.5"
-              strokeDasharray="8 5"
-              initial={{ pathLength: reduced ? 1 : 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: reduced ? 0 : 1.2, delay: 0.3, ease: "easeOut" }}
-            />
-
-            {/* Tier 2 -> Tier 3 Cascading Sub-Branches (Rendered when Expanded) */}
-            {isExpanded && (
-              <>
-                {/* Bride's Parents -> Ishaan (Brother Card Top Center) */}
-                <motion.path
-                  d="M 250, 460 C 250, 515 166, 520 166, 565"
-                  stroke="url(#treeBranchGold)"
-                  strokeWidth="2.5"
-                  strokeDasharray="8 5"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.1, ease: "easeOut" }}
-                />
-                {/* Center Trunk -> Kabir & Naina (Little Ones Card Top Center) */}
-                <motion.path
-                  d="M 500, 235 L 500, 565"
-                  stroke="url(#treeBranchGold)"
-                  strokeWidth="2"
-                  strokeDasharray="8 5"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.3, delay: 0.2, ease: "easeOut" }}
-                />
-                {/* Groom's Parents -> Riya (Sister Card Top Center) */}
-                <motion.path
-                  d="M 750, 460 C 750, 515 833, 520 833, 565"
-                  stroke="url(#treeBranchGold)"
-                  strokeWidth="2.5"
-                  strokeDasharray="8 5"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.1, ease: "easeOut" }}
-                />
-              </>
-            )}
-          </svg>
-
-          {/* Mobile Vertical Central Branch Guide */}
-          <div className="md:hidden absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-0.5 border-l-2 border-dashed border-[#b89138]/70 pointer-events-none z-0" />
-
-          {/* TIER 1: GRANDMOTHER / MATRIARCH (Top Crown Elder) */}
-          <div className="relative z-10 w-full max-w-md mb-12 sm:mb-16">
-            <FamilyCard person={grandmother} />
+        {/* PART 2: TWO MAIN FAMILY CARDS WITH ASYMMETRIC HANDCRAFTED OFFSETS & LIFTED DEPTH SHADOWS */}
+        <div className="grid gap-10 md:grid-cols-2 lg:gap-14 items-start">
+          {/* BRIDE'S FAMILY CARD (SLIGHT LEFT TILT & TOP OFFSET) */}
+          <div className="md:-translate-y-2">
+            <FamilySummaryCard data={brideFamilyData} staggerDelay={0} cardTilt="-rotate-[1.5deg]" />
           </div>
 
-          {/* TIER 2: THE PARENTS (Symmetric Color-Coded Side-by-Side Boughs) */}
-          <div className="relative z-10 w-full grid gap-8 sm:gap-12 md:grid-cols-2 max-w-4xl mb-8">
-            {/* Left Card: Parents of the Bride (Soft Blush Rose Tint) */}
-            <FamilyCard person={brideParents} />
-            {/* Right Card: Parents of the Groom (Soft Sage / Deep Gold Tint) */}
-            <FamilyCard person={groomParents} />
+          {/* GROOM'S FAMILY CARD (SLIGHT RIGHT TILT & BOTTOM OFFSET) */}
+          <div className="md:translate-y-4">
+            <FamilySummaryCard data={groomFamilyData} staggerDelay={0.15} cardTilt="rotate-[1.5deg]" />
           </div>
-
-          {/* EXPANDABLE TIER 3: SIBLINGS & THE LITTLE ONES */}
-          <AnimatePresence>
-            {isExpanded && (
-              <motion.div
-                initial={{ opacity: 0, height: 0, overflow: "hidden" }}
-                animate={{ opacity: 1, height: "auto", overflow: "visible" }}
-                exit={{ opacity: 0, height: 0, overflow: "hidden" }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="relative z-10 w-full mt-6 mb-8"
-              >
-                <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
-                  <FamilyCard person={brideSibling} />
-                  <FamilyCard person={littleOnes} />
-                  <FamilyCard person={groomSibling} />
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* ELEGANT VIEW FAMILY DETAILS GOLD PILL BUTTON */}
-          <motion.button
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => setIsExpanded((prev) => !prev)}
-            className="mt-6 relative z-20 px-8 py-3.5 rounded-full border border-[#b89138]/70 bg-[#fffdf8]/95 backdrop-blur-md text-[0.68rem] sm:text-xs tracking-[0.28em] font-bold text-[#8c6c23] uppercase shadow-[0_4px_16px_rgba(74,58,40,0.08)] hover:bg-[#b89138] hover:text-[#fffdf9] hover:border-[#b89138] transition-all duration-300 flex items-center gap-2.5 cursor-pointer"
-          >
-            <span>{isExpanded ? "Hide Family Details" : "View Family Details"}</span>
-            <span className="text-base leading-none transition-transform duration-300">
-              {isExpanded ? "↑" : "↓"}
-            </span>
-          </motion.button>
         </div>
       </div>
     </section>
   );
 }
 
-{/* Reusable Color-Coded Deckle-Edge Family Member Card Component */}
-function FamilyCard({
-  person,
+{/* Export Aliases for Compatibility */}
+export { FamilySection as FamilyCourt, FamilySection as FamilyTree };
+
+{/* COMPONENT FOR SINGLE FAMILY CARD (SUMMARY VIEW & CAROUSEL DETAIL VIEW) */}
+function FamilySummaryCard({
+  data,
+  staggerDelay = 0,
+  cardTilt = "",
 }: {
-  person: typeof family[number];
+  data: FamilyData;
+  staggerDelay?: number;
+  cardTilt?: string;
 }) {
   const reduced = useReducedMotion();
-  const { side, monogram, labelColor } = getFamilyMetadata(person.relation, person.name);
+  const [isCarouselOpen, setIsCarouselOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  // Dynamic styling based on Bride vs Groom side vs Matriarch vs Center
-  const cardStyle =
-    side === "bride"
-      ? "bg-gradient-to-b from-[#fffdfa] to-[#fcf2ef]/95 border-[#e8bfa0]/75 shadow-[0_12px_36px_rgba(168,90,72,0.11)] group-hover:border-[#a85a48]/70 group-hover:shadow-[0_20px_50px_rgba(168,90,72,0.22)]"
-      : side === "groom"
-      ? "bg-gradient-to-b from-[#fffdfa] to-[#f2f5ec]/95 border-[#c0d0b0]/75 shadow-[0_12px_36px_rgba(88,107,70,0.11)] group-hover:border-[#586b46]/70 group-hover:shadow-[0_20px_50px_rgba(88,107,70,0.22)]"
-      : side === "matriarch"
-      ? "bg-gradient-to-b from-[#fffdf8] to-[#faf3e2]/95 border-[#b89138]/80 shadow-[0_16px_44px_rgba(184,145,56,0.18)] group-hover:border-[#b89138] group-hover:shadow-[0_20px_50px_rgba(184,145,56,0.28)]"
-      : "bg-gradient-to-b from-[#fffdfa] to-[#faf5e8]/95 border-[#e0d2ad]/75 shadow-[0_12px_36px_rgba(74,58,40,0.1)] group-hover:border-[#b89138]/60 group-hover:shadow-[0_20px_50px_rgba(184,145,56,0.2)]";
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev + 1) % data.members.length);
+  };
 
-  const innerFrameStyle =
-    side === "bride"
-      ? "border-[#d99b88]/35 group-hover:border-[#a85a48]/55"
-      : side === "groom"
-      ? "border-[#95a882]/35 group-hover:border-[#586b46]/55"
-      : side === "matriarch"
-      ? "border-[#b89138]/40 group-hover:border-[#b89138]/70"
-      : "border-[#d0b875]/35 group-hover:border-[#b89138]/50";
-
-  const locketOuterStyle =
-    side === "bride"
-      ? "border-[#d99b88] bg-gradient-to-b from-[#fffdfa] to-[#f7e6e0]"
-      : side === "groom"
-      ? "border-[#95a882] bg-gradient-to-b from-[#fffdfa] to-[#e8efe0]"
-      : side === "matriarch"
-      ? "border-[#b89138] bg-gradient-to-b from-[#fffdf8] to-[#f5ebd6]"
-      : "border-[#d0b875] bg-gradient-to-b from-[#fffdfa] to-[#faf1dc]";
-
-  const locketInnerStyle =
-    side === "bride"
-      ? "bg-[#faf0ec] border-[#e8bfa0]/40 text-[#a85a48]"
-      : side === "groom"
-      ? "bg-[#f2f6ee] border-[#c0d0b0]/40 text-[#586b46]"
-      : side === "matriarch"
-      ? "bg-[#f7f0df] border-[#b89138]/40 text-[#9e7828]"
-      : "bg-[#faf4e6] border-[#d0b875]/40 text-[#8c6c23]";
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev - 1 + data.members.length) % data.members.length);
+  };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28, scale: 0.96 }}
+      initial={{ opacity: 0, y: 28, scale: 0.95 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-6%" }}
-      transition={{ duration: reduced ? 0.3 : 0.85, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={reduced ? {} : { y: -6, scale: 1.02 }}
-      className="group relative flex flex-col h-full w-full"
+      viewport={{ once: true }}
+      transition={{ duration: reduced ? 0.3 : 0.75, delay: reduced ? 0 : staggerDelay, ease: [0.22, 1, 0.36, 1] }}
+      className={`group relative flex flex-col w-full h-full transition-transform duration-500 ${reduced ? "" : cardTilt}`}
     >
-      {/* Organic Branch Growth Junction (Leaf & Bud Sprout at Card Top Edge) */}
-      <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none flex flex-col items-center">
-        <svg
-          viewBox="0 0 36 20"
-          className={`w-8 h-4 overflow-visible ${
-            side === "bride" ? "text-[#a85a48]" : side === "groom" ? "text-[#586b46]" : "text-[#b89138]"
-          }`}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.3"
-        >
-          {/* Left Leaf */}
-          <path d="M 18 18 C 12 12, 4 12, 2 5 C 9 5, 15 10, 18 18 Z" fill="currentColor" fillOpacity="0.22" />
-          {/* Right Leaf */}
-          <path d="M 18 18 C 24 12, 32 12, 34 5 C 27 5, 21 10, 18 18 Z" fill="currentColor" fillOpacity="0.22" />
-          {/* Central Bud Sprout */}
-          <circle cx="18" cy="4" r="2.2" fill="currentColor" />
-        </svg>
-      </div>
-
-      {/* Card Outer Container with Fibrous Torn-Paper Deckle Edge Filter */}
-      <div className="relative h-full w-full">
-        {/* Authentic Deckle Edge Filtered Base Paper */}
-        <div className="deckle-edge absolute inset-0 rounded-2xl bg-[#fffdf9] shadow-[0_12px_36px_rgba(74,58,40,0.12)] pointer-events-none" aria-hidden="true" />
-
-        {/* Card Content Surface with Tactile Grain & Custom Side Tint */}
+      {/* Outer Card Deckle Edge Filtered Container with Lifted Diffused Shadow & Cotton Sheet Texture */}
+      <div className={`relative w-full h-full rounded-2xl ${data.cardShadow} transition-shadow duration-500`}>
+        {/* Authentic Deckle Edge Filter Base */}
         <div
-          className={`grain relative backdrop-blur-md px-6 py-7 sm:px-8 sm:py-9 rounded-2xl border flex flex-col items-center text-center h-full transition-all duration-500 ${cardStyle}`}
-        >
-          {/* Inner Gold / Rose / Sage Corner Frame */}
-          <div className={`pointer-events-none absolute inset-3 rounded-xl border transition-colors duration-500 ${innerFrameStyle}`} />
+          className={`deckle-edge absolute inset-0 rounded-2xl ${data.cardWash} pointer-events-none transition-all duration-500`}
+          aria-hidden="true"
+        />
 
-          {/* Handcrafted Gold Monogram Locket Avatar */}
-          <div className="relative mb-3.5 flex items-center justify-center transition-transform duration-500 group-hover:scale-108">
-            <div
-              className={`rounded-full border-2 p-1 shadow-md ${locketOuterStyle} ${
-                side === "matriarch" ? "w-16 h-16 sm:w-18 sm:h-18" : "w-14 h-14 sm:w-16 sm:h-16"
-              }`}
-            >
-              <div
-                className={`w-full h-full rounded-full border flex items-center justify-center font-[family-name:var(--font-serif)] font-bold tracking-wider shadow-inner ${locketInnerStyle} ${
-                  side === "matriarch" ? "text-base sm:text-lg" : "text-sm sm:text-base"
-                }`}
+        {/* Card Content Surface with Tactile Grain Noise & Woven Linen Texture */}
+        <div className="grain relative z-10 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-transparent flex flex-col h-full bg-[radial-gradient(#b89138_0.75px,transparent_0.75px)] [background-size:16px_16px] [background-opacity:0.04]">
+          {/* Inner Corner Frame Accent */}
+          <div className="pointer-events-none absolute inset-3 rounded-xl border border-[#b89138]/20 transition-colors duration-500 group-hover:border-[#b89138]/45" />
+
+          {/* ANIMATEPRESENCE TOGGLE BETWEEN SUMMARY VIEW & SWIPEABLE CAROUSEL */}
+          <AnimatePresence mode="wait">
+            {!isCarouselOpen ? (
+              /* SUMMARY CARD VIEW */
+              <motion.div
+                key="summary"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35 }}
+                className="flex flex-col h-full"
               >
-                {monogram}
-              </div>
-            </div>
-            <div
-              className={`pointer-events-none absolute -inset-1 rounded-full border ${
-                side === "bride" ? "border-[#d99b88]/30" : side === "groom" ? "border-[#95a882]/30" : "border-[#b89138]/25"
-              }`}
-            />
-          </div>
+                {/* 1. POLAROID-STYLE "DEVELOPING PHOTO" ENTRANCE ANIMATION & VINTAGE JHAROKHA ARCHED FRAME */}
+                <div className="relative w-full mb-5 transition-transform duration-500 group-hover:scale-[1.02]">
+                  {/* Embossed Royal Gold Wax-Seal Medallion Corner Clasp */}
+                  <div
+                    className={`absolute z-30 pointer-events-none ${
+                      data.side === "bride" ? "-top-3.5 -right-3" : "-top-3.5 -left-3"
+                    }`}
+                  >
+                    <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#fce6a6] via-[#b89138] to-[#6e5015] shadow-[0_6px_16px_rgba(110,80,21,0.45)] border-2 border-[#fff8e6] flex items-center justify-center text-[#fffdf8] transition-transform duration-500 group-hover:scale-110">
+                      {/* Inner Embossed Ring & Motif */}
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-[#fce6a6]/50 bg-black/10 flex items-center justify-center">
+                        <span className="text-xs sm:text-sm font-serif font-bold tracking-tighter drop-shadow-xs">
+                          {data.side === "bride" ? "✦" : "⚜"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
 
-          {/* Family Member Name */}
-          <h3
-            className={`font-[family-name:var(--font-serif)] font-medium leading-snug text-[#3a2b1c] ${
-              side === "matriarch" ? "text-3xl sm:text-3.5xl text-[#2c1e10]" : "text-2xl sm:text-3xl"
-            }`}
-          >
-            {person.name}
-          </h3>
+                  {/* Thick Vintage Paper Matting & Arched Top Outline */}
+                  <div className="relative rounded-t-[3.2rem] sm:rounded-t-[4rem] rounded-b-2xl p-2.5 sm:p-3 bg-[#fffdf8] shadow-md border-2 border-[#b89138]/45 overflow-hidden">
+                    {/* Arched Photo Mask Container with Developing Blur-to-Sharp Polaroid Animation */}
+                    <div className="relative w-full overflow-hidden rounded-t-[2.6rem] sm:rounded-t-[3.3rem] rounded-b-xl bg-[#faf3e8]">
+                      <motion.img
+                        initial={reduced ? {} : { filter: "blur(10px) brightness(1.15)", opacity: 0.3, scale: 0.97 }}
+                        whileInView={reduced ? {} : { filter: "blur(0px) brightness(0.98)", opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: reduced ? 0 : 1.1, ease: [0.22, 1, 0.36, 1], delay: staggerDelay + 0.1 }}
+                        src={data.parents.photo}
+                        alt={data.parents.names}
+                        loading="eager"
+                        className="w-full h-72 sm:h-80 object-cover object-top sepia-[0.18] contrast-[1.04]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#2c1e10]/25 via-transparent to-transparent pointer-events-none" />
+                    </div>
+                  </div>
 
-          {/* Differentiated Relation Label Badge */}
-          <p className={`eyebrow font-bold text-[0.62rem] sm:text-xs uppercase mt-1.5 ${labelColor}`}>
-            {person.relation}
-          </p>
+                  {/* Top Arch Gold Sprout Emblem */}
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+                    <div className="h-6 w-6 rounded-full border border-[#b89138] bg-[#fffdf8] shadow-xs flex items-center justify-center">
+                      <span className="h-2 w-2 rounded-full bg-[#b89138]" />
+                    </div>
+                  </div>
+                </div>
 
-          {/* Personal Note */}
-          <p className="font-[family-name:var(--font-script)] text-xl sm:text-2xl text-[#7a592c] italic mt-3.5 leading-relaxed">
-            "{person.note}"
-          </p>
+                {/* 2. STAGGERED TEXT CONTENT (NAMES, RELATION, ELEVATED QUOTE & BUTTON) */}
+                <motion.div
+                  initial={reduced ? {} : { opacity: 0, y: 12 }}
+                  whileInView={reduced ? {} : { opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: reduced ? 0 : 0.6, delay: staggerDelay + 0.3 }}
+                  className="flex flex-col flex-1"
+                >
+                  {/* ORNAMENTAL MARIGOLD DIVIDER */}
+                  <div className="flex items-center justify-center gap-3.5 my-3.5">
+                    <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-[#b89138]/60 to-[#b89138]/80" />
+                    <Motif kind="marigold" className="h-4 w-4 text-[#b89138]" />
+                    <div className="h-[1px] w-12 bg-gradient-to-l from-transparent via-[#b89138]/60 to-[#b89138]/80" />
+                  </div>
+
+                  {/* NAMES & RELATION */}
+                  <div className="text-center flex-1 flex flex-col justify-center">
+                    <h3 className="font-[family-name:var(--font-serif)] text-2.5xl sm:text-3xl font-medium leading-snug text-[#3a2b1c]">
+                      {data.parents.names}
+                    </h3>
+
+                    {/* RELATION LABEL */}
+                    <p className={`eyebrow font-bold text-[0.65rem] sm:text-xs uppercase mt-1.5 ${data.accentColor}`}>
+                      {data.parents.relation}
+                    </p>
+
+                    {/* SHORT ITALIC QUOTE WITH WATERMARK QUOTATION MARKS */}
+                    <div className="relative mt-3.5 px-4 pt-1 pb-2">
+                      <span className="font-[family-name:var(--font-serif)] text-5xl leading-none text-[#b89138]/25 absolute -top-3 left-2 select-none pointer-events-none">
+                        “
+                      </span>
+                      <p className="font-[family-name:var(--font-script)] text-xl sm:text-2xl text-[#7a592c] italic leading-relaxed relative z-10">
+                        {data.parents.quote}
+                      </p>
+                      <span className="font-[family-name:var(--font-serif)] text-5xl leading-none text-[#b89138]/25 absolute -bottom-4 right-2 select-none pointer-events-none">
+                        ”
+                      </span>
+                      <div className="h-[1px] w-16 mx-auto mt-2.5 bg-gradient-to-r from-transparent via-[#b89138]/40 to-transparent" />
+                    </div>
+                  </div>
+
+                  {/* ULTRA-PREMIUM ROYAL GOLD FOIL GRADIENT PILL BUTTON WITH TACTILE COLOR WASH & LOTUS GEM BADGE */}
+                  <div className="mt-8 flex justify-center pt-2">
+                    <motion.div
+                      whileHover={{ scale: 1.04, y: -2 }}
+                      whileTap={{ scale: 0.96 }}
+                      className="group/btn p-[2px] rounded-full bg-gradient-to-r from-[#b89138] via-[#fce6a6] via-[#d4aa3b] to-[#8c671e] shadow-[0_6px_22px_rgba(184,145,56,0.24)] hover:shadow-[0_10px_30px_rgba(184,145,56,0.4)] transition-all duration-300"
+                    >
+                      <button
+                        onClick={() => {
+                          setIsCarouselOpen(true);
+                          setActiveIndex(0);
+                        }}
+                        className={`relative overflow-hidden px-7 py-3.5 rounded-full bg-[#fffdf8] text-[0.65rem] sm:text-xs tracking-[0.28em] font-bold uppercase transition-all duration-500 flex items-center gap-2.5 cursor-pointer shadow-inner ${
+                          data.side === "bride"
+                            ? "text-[#a85a48] hover:bg-gradient-to-r hover:from-[#a85a48] hover:to-[#8c4232] hover:text-[#fffdf9]"
+                            : "text-[#586b46] hover:bg-gradient-to-r hover:from-[#586b46] hover:to-[#425233] hover:text-[#fffdf9]"
+                        }`}
+                      >
+                        <span className="relative z-10">View {data.side === "bride" ? "Bride's" : "Groom's"} Family Details</span>
+                        <span className="relative z-10 flex items-center gap-1.5">
+                          <span className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-[#b89138]/15 border border-[#b89138]/40 text-[#8c6c23] group-hover/btn:border-white/50 group-hover/btn:text-white group-hover/btn:bg-white/20 text-[0.6rem] transition-all">✦</span>
+                          <span className="text-xs transition-transform duration-300 group-hover/btn:translate-x-1">→</span>
+                        </span>
+                      </button>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              </motion.div>
+            ) : (
+              /* PART 3: SWIPEABLE CAROUSEL DETAIL VIEW */
+              <motion.div
+                key="carousel"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className="flex flex-col h-full min-h-[26rem] justify-between relative"
+              >
+                {/* BACK / COLLAPSE BUTTON AT TOP */}
+                <div className="flex items-center justify-between border-b border-[#b89138]/20 pb-3 mb-4 z-20">
+                  <span className={`eyebrow text-xs font-bold uppercase ${data.accentColor}`}>
+                    {data.title}
+                  </span>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setIsCarouselOpen(false)}
+                    className="p-[1.5px] rounded-full bg-gradient-to-r from-[#b89138] via-[#d4aa3b] to-[#8c671e] shadow-2xs cursor-pointer"
+                  >
+                    <span className="px-4 py-1.5 rounded-full bg-[#fffdf8] text-[0.65rem] tracking-wider uppercase font-bold text-[#8c6c23] hover:bg-[#8c6c23] hover:text-white transition-all flex items-center gap-1.5">
+                      <span>← Back</span>
+                    </span>
+                  </motion.button>
+                </div>
+
+                {/* SWIPEABLE CAROUSEL SLIDE STAGE */}
+                <div className="relative w-full overflow-hidden flex-1 flex items-center justify-center my-2">
+                  {/* DESKTOP PREV / NEXT ARROWS */}
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={handlePrev}
+                    aria-label="Previous family member"
+                    className="hidden sm:flex absolute left-0 z-30 w-9 h-9 rounded-full border-2 border-[#b89138]/60 bg-[#fffdf8] text-[#8c6c23] items-center justify-center shadow-md hover:bg-gradient-to-r hover:from-[#b89138] hover:to-[#8c671e] hover:text-white transition-all cursor-pointer"
+                  >
+                    ‹
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={handleNext}
+                    aria-label="Next family member"
+                    className="hidden sm:flex absolute right-0 z-30 w-9 h-9 rounded-full border-2 border-[#b89138]/60 bg-[#fffdf8] text-[#8c6c23] items-center justify-center shadow-md hover:bg-gradient-to-r hover:from-[#b89138] hover:to-[#8c671e] hover:text-white transition-all cursor-pointer"
+                  >
+                    ›
+                  </motion.button>
+
+                  {/* CAROUSEL SLIDE CONTAINER WITH DRAG SWIPE */}
+                  <motion.div
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={0.2}
+                    onDragEnd={(_, info) => {
+                      if (info.offset.x < -40) handleNext();
+                      if (info.offset.x > 40) handlePrev();
+                    }}
+                    className="w-full flex items-center justify-center px-4 cursor-grab active:cursor-grabbing"
+                  >
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeIndex}
+                        initial={{ opacity: 0, scale: 0.94, x: 20 }}
+                        animate={{ opacity: 1, scale: 1, x: 0 }}
+                        exit={{ opacity: 0, scale: 0.94, x: -20 }}
+                        transition={{ duration: 0.35, ease: "easeOut" }}
+                        className="flex flex-col items-center text-center w-full max-w-sm"
+                      >
+                        {/* 1. CIRCULAR PORTRAIT PHOTO OR MONOGRAM FALLBACK */}
+                        <div className="relative mb-4 flex items-center justify-center">
+                          <div className="rounded-full border-2 border-[#b89138] p-1 bg-gradient-to-b from-[#fffdf8] to-[#f5ebd6] shadow-md w-24 h-24 sm:w-28 sm:h-28">
+                            {data.members[activeIndex]?.photo ? (
+                              <img
+                                src={data.members[activeIndex].photo}
+                                alt={data.members[activeIndex].name}
+                                className="w-full h-full rounded-full object-cover sepia-[0.2] contrast-[1.05]"
+                              />
+                            ) : (
+                              <div className={`w-full h-full rounded-full border flex items-center justify-center font-[family-name:var(--font-serif)] font-bold tracking-wider shadow-inner text-base sm:text-lg ${data.locketBg}`}>
+                                {data.members[activeIndex]?.monogram}
+                              </div>
+                            )}
+                          </div>
+                          {/* Active Ring Glow Ring */}
+                          <div className="pointer-events-none absolute -inset-1.5 rounded-full border border-[#b89138]/40 animate-pulse" />
+                        </div>
+
+                        {/* 2. MEMBER NAME */}
+                        <h4 className="font-[family-name:var(--font-serif)] text-2xl sm:text-3xl font-medium text-[#3a2b1c]">
+                          {data.members[activeIndex]?.name}
+                        </h4>
+
+                        {/* 3. RELATION TO BRIDE/GROOM */}
+                        <p className={`eyebrow font-bold text-[0.62rem] sm:text-xs uppercase mt-1.5 ${data.accentColor}`}>
+                          {data.members[activeIndex]?.relation}
+                        </p>
+
+                        {/* 4. SHORT ITALIC QUOTE */}
+                        {data.members[activeIndex]?.quote ? (
+                          <p className="font-[family-name:var(--font-script)] text-xl sm:text-2xl text-[#7a592c] italic mt-3 leading-relaxed">
+                            "{data.members[activeIndex].quote}"
+                          </p>
+                        ) : null}
+                      </motion.div>
+                    </AnimatePresence>
+                  </motion.div>
+                </div>
+
+                {/* DOT PAGINATION INDICATORS BENEATH CAROUSEL */}
+                <div className="flex items-center justify-center gap-2 pt-3 border-t border-[#b89138]/15 z-20">
+                  {data.members.map((m, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveIndex(idx)}
+                      aria-label={`Jump to ${m.name}`}
+                      className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                        idx === activeIndex
+                          ? "w-6 bg-[#b89138] shadow-2xs"
+                          : "w-2.5 bg-[#b89138]/35 hover:bg-[#b89138]/60"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </motion.div>
