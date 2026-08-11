@@ -233,6 +233,22 @@
   }
 }
 
+@utility card-sand-texture {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    filter: url(#sandGrain);
+    mix-blend-mode: multiply;
+    opacity: 0.45;
+    pointer-events: none;
+    border-radius: inherit;
+    z-index: 1;
+  }
+}
+
 /* Torn / deckle edge — apply to a decorative background layer, never to text */
 @utility deckle-edge {
   background-color: var(--card);

@@ -8,6 +8,8 @@ import { InvitationCard } from "@/components/artisan/invitation-card";
 import { OrderOfEvents } from "@/components/artisan/order-of-events";
 import { Scrapbook } from "@/components/artisan/scrapbook";
 import { FamilyTree } from "@/components/artisan/family-tree";
+import { BlessingsWall } from "@/components/artisan/blessings-wall";
+import { RsvpSection } from "@/components/artisan/rsvp-section";
 import { Journal } from "@/components/artisan/journal";
 import { ConciergeDesk } from "@/components/artisan/concierge-desk";
 import { Closing } from "@/components/artisan/closing";
@@ -37,6 +39,8 @@ const links = [
   ["Ceremonies", "ceremonies"],
   ["Album", "album"],
   ["Family", "family"],
+  ["Wishes", "blessings"],
+  ["RSVP", "rsvp"],
   ["Travel", "travel"],
   ["Contact", "contact"],
 ] as const;
@@ -87,6 +91,8 @@ function Index() {
         <OrderOfEvents />
         <Scrapbook />
         <FamilyTree />
+        <BlessingsWall />
+        <RsvpSection />
         <Journal />
         <ConciergeDesk />
         <Closing />
@@ -96,10 +102,39 @@ function Index() {
         <button
           type="button"
           onClick={toggle}
-          aria-pressed={playing}
-          className="stamp fixed right-5 bottom-5 z-40 px-4 py-2.5 text-[0.55rem] text-ink"
+          aria-label={playing ? "Pause ambient music" : "Play ambient music"}
+          title={playing ? "Pause Music" : "Play Music"}
+          className="card-sand-texture group fixed right-6 bottom-6 z-40 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-[#b89138]/60 bg-[#faf5eb]/90 text-[#8c6c23] shadow-[0_8px_24px_rgba(60,40,15,0.18)] backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#8c6c23] hover:bg-[#f5ebd7] active:scale-95 cursor-pointer"
         >
-          {playing ? "Pause ambience" : "Play ambience"}
+          {/* Inner hairline gold ring */}
+          <span className="absolute inset-1 rounded-full border border-[#b89138]/30 pointer-events-none transition-colors duration-300 group-hover:border-[#8c6c23]/50" />
+
+          {/* Soft warm aura pulse when playing */}
+          {playing && (
+            <span className="absolute -inset-1 rounded-full bg-[#b89138]/20 animate-ping opacity-60 pointer-events-none" />
+          )}
+
+          {playing ? (
+            <div className="relative z-10 flex items-center justify-center gap-0.5">
+              {/* Active Music Note Icon in rich warm brass */}
+              <svg className="h-5 w-5 text-[#8c6c23] fill-current" viewBox="0 0 24 24">
+                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+              </svg>
+              {/* Mini Animated Equalizer Sound Bars */}
+              <span className="flex items-end gap-[1.5px] h-3 ml-0.5">
+                <span className="w-[2px] h-full bg-[#8c6c23] rounded-full animate-[bounce_0.8s_infinite_100ms]" />
+                <span className="w-[2px] h-2/3 bg-[#8c6c23] rounded-full animate-[bounce_0.8s_infinite_300ms]" />
+                <span className="w-[2px] h-4/5 bg-[#8c6c23] rounded-full animate-[bounce_0.8s_infinite_500ms]" />
+              </span>
+            </div>
+          ) : (
+            <div className="relative z-10 flex items-center justify-center">
+              {/* Paused Music Note Icon with Slash */}
+              <svg className="h-5 w-5 text-[#8c6c23]/75 fill-current" viewBox="0 0 24 24">
+                <path d="M4.27 3L3 4.27l9 9v.28c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V14.27l5 5L20.73 21 22 19.73 4.27 3zM14 7h4V3h-6v5.18l2 2V7z"/>
+              </svg>
+            </div>
+          )}
         </button>
       ) : null}
     </>

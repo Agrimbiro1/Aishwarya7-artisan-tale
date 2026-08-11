@@ -326,7 +326,7 @@ export function InvitationCard({
         >
           {/* Organic Deckle / Torn Edge Handmade Paper Backdrop Sheet */}
           <div
-            className="deckle-edge absolute -inset-1 rounded-xl bg-[#fffdf7] opacity-98 shadow-[0_30px_70px_-15px_rgba(40,22,8,0.35),0_12px_28px_rgba(40,22,8,0.2)]"
+            className="deckle-edge card-sand-texture absolute -inset-1 rounded-xl bg-[#fffdf7] opacity-98 shadow-[0_30px_70px_-15px_rgba(40,22,8,0.35),0_12px_28px_rgba(40,22,8,0.2)]"
             aria-hidden="true"
           />
 

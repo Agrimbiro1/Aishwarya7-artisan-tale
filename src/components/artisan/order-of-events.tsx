@@ -726,7 +726,7 @@ export function OrderOfEvents() {
 
                     {/* Refined Time & Venue Pill with Thin Gold Outline & Line-Art Icons */}
                     <div
-                      className={`inline-flex flex-wrap items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#fffdf8]/90 border border-[#b89138]/45 text-xs sm:text-sm font-medium text-[#3a2b1c] shadow-[0_2px_12px_rgba(184,145,56,0.08)] mb-3.5 ${
+                      className={`inline-flex flex-wrap items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#fffdf8]/90 border border-[#b89138]/45 text-xs sm:text-sm font-medium text-[#3a2b1c] shadow-[0_2px_12px_rgba(184,145,56,0.08)] card-sand-texture mb-3.5 ${
                         isEven ? "sm:justify-start" : "sm:justify-end"
                       }`}
                     >

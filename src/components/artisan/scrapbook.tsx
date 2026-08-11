@@ -171,7 +171,7 @@ export function Scrapbook() {
                 style={{ zIndex: 10 + i }}
               >
                 {/* Handcrafted Polaroid Card Container */}
-                <div className="relative bg-[#fffdf9] p-4 sm:p-6 pb-16 sm:pb-20 rounded-sm shadow-[0_16px_45px_rgba(60,45,30,0.22),0_4px_14px_rgba(0,0,0,0.06)] border border-[#e8dcb8]/80 transition-shadow duration-500 group-hover:shadow-[0_28px_65px_rgba(60,45,30,0.35)]">
+                <div className="relative card-sand-texture bg-[#fffdf9] p-4 sm:p-6 pb-16 sm:pb-20 rounded-sm shadow-[0_16px_45px_rgba(60,45,30,0.22),0_4px_14px_rgba(0,0,0,0.06)] border border-[#e8dcb8]/80 transition-shadow duration-500 group-hover:shadow-[0_28px_65px_rgba(60,45,30,0.35)]">
                   {/* Warm-Toned Patterned Washi Tape Strip Left */}
                   <span
                     className={`absolute -top-3.5 left-8 sm:left-12 h-7 w-24 sm:w-28 ${mem.tapeLeft} z-20 pointer-events-none backdrop-blur-[2px]`}
@@ -272,7 +272,7 @@ export function Scrapbook() {
               style={{ transformPerspective: 1400 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative bg-[#fffdf9] p-6 sm:p-8 rounded-sm shadow-2xl border border-[#e8dcb8]">
+              <div className="relative card-sand-texture bg-[#fffdf9] p-6 sm:p-8 rounded-sm shadow-2xl border border-[#e8dcb8]">
                 <img src={current.src} alt={current.alt} width={1024} height={1024} className="w-full object-cover sepia-[0.08]" />
                 <figcaption className="mt-5 flex items-baseline justify-between gap-4">
                   <div>

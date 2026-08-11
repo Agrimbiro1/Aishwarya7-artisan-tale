@@ -95,7 +95,7 @@ export function ConciergeDesk() {
           className="mt-12 sm:mt-16 group relative"
         >
           {/* DECKLE EDGE PAPER CARD BASE WITH ENHANCED 3D DEPTH SHADOW */}
-          <div className="deckle-edge absolute inset-0 rounded-2xl bg-[#fffdf8] border-2 border-[#b89138]/45 shadow-[0_24px_55px_-12px_rgba(184,145,56,0.28)] pointer-events-none transition-all duration-500 group-hover:shadow-[0_32px_70px_-10px_rgba(184,145,56,0.38)]" />
+          <div className="deckle-edge card-sand-texture absolute inset-0 rounded-2xl bg-[#fffdf8] border-2 border-[#b89138]/45 shadow-[0_24px_55px_-12px_rgba(184,145,56,0.28)] pointer-events-none transition-all duration-500 group-hover:shadow-[0_32px_70px_-10px_rgba(184,145,56,0.38)]" />
 
           {/* CARD SURFACE CONTENT */}
           <div className="grain relative z-10 p-6 sm:p-12 rounded-2xl flex flex-col text-center">
@@ -173,7 +173,7 @@ export function ConciergeDesk() {
                     transition={{ duration: 0.45, delay: reduced ? 0 : idx * 0.08 }}
                     whileHover={isLink && !reduced ? { y: -3, scale: 1.018 } : {}}
                     whileTap={isLink && !reduced ? { scale: 0.97 } : {}}
-                    className={`group/cell grain relative flex items-center gap-3.5 p-4 sm:p-4.5 rounded-xl border-2 overflow-hidden backdrop-blur-xs transition-all duration-300 min-h-[76px] bg-[#faf5eb]/95 border-[#b89138]/35 hover:border-[#b89138]/80 hover:bg-[#fffdf9] shadow-2xs hover:shadow-md ${
+                    className={`group/cell grain card-sand-texture relative flex items-center gap-3.5 p-4 sm:p-4.5 rounded-xl border-2 overflow-hidden backdrop-blur-xs transition-all duration-300 min-h-[76px] bg-[#faf5eb]/95 border-[#b89138]/35 hover:border-[#b89138]/80 hover:bg-[#fffdf9] shadow-2xs hover:shadow-md ${
                       isLink ? "cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#b89138]" : ""
                     }`}
                   >

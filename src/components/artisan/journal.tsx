@@ -197,7 +197,7 @@ export function Journal() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: i * 0.08 }}
                     whileHover={{ y: -3, scale: 1.015 }}
-                    className={`group relative flex flex-col justify-between h-full rounded-xl p-5 backdrop-blur-sm border overflow-hidden transition-all duration-300 ${
+                    className={`group relative card-sand-texture flex flex-col justify-between h-full rounded-xl p-5 backdrop-blur-sm border overflow-hidden transition-all duration-300 ${
                       isSelected
                         ? "ring-2 ring-[#b89138] border-[#8c6c23] shadow-xl scale-[1.02] bg-[#fffdf8]"
                         : `${config.bgClass} ${config.borderClass} ${config.shadowClass}`

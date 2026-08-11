@@ -15,6 +15,7 @@ export const invitation = {
   time: "Phere at 8:40 in the evening",
   blessing:
     "With the blessings of our elders and the warmth of your presence, we begin a new chapter.",
+  rsvpDeadline: "December 15, 2026",
 };
 
 export type WeddingEvent = {

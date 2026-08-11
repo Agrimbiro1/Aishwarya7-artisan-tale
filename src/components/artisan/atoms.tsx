@@ -10,6 +10,23 @@ export function CraftDefs() {
           <feTurbulence type="fractalNoise" baseFrequency="0.013 0.05" numOctaves={3} seed={9} result="t" />
           <feDisplacementMap in="SourceGraphic" in2="t" scale={7} xChannelSelector="R" yChannelSelector="G" />
         </filter>
+        <filter id="sandGrain">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.9"
+            numOctaves={3}
+            stitchTiles="stitch"
+            result="noise"
+          />
+          <feColorMatrix
+            in="noise"
+            type="matrix"
+            values="0 0 0 0 0.55
+                    0 0 0 0 0.47
+                    0 0 0 0 0.35
+                    0 0 0 0.12 0"
+          />
+        </filter>
       </defs>
     </svg>
   );
@@ -27,7 +44,7 @@ export function Paper({
 }) {
   return (
     <div className={`relative ${className}`}>
-      <div className="deckle-edge absolute inset-0" aria-hidden="true" />
+      <div className="deckle-edge card-sand-texture absolute inset-0" aria-hidden="true" />
       {tint ? (
         <div className="absolute inset-0" style={{ backgroundColor: tint }} aria-hidden="true" />
       ) : null}

@@ -54,16 +54,18 @@ export const MAP_LOCATIONS: MapLocationPin[] = [
 ];
 
 // DARBAAN (RAJASTHANI GATEKEEPER) SVG ILLUSTRATED CHARACTER COMPONENT
-function DarbaanCharacter({
+export function DarbaanCharacter({
   isWalking,
   isBowing,
   idleAnimationIndex,
   direction = 1,
+  className = "h-20 w-16 sm:h-24 sm:w-20",
 }: {
   isWalking: boolean;
   isBowing: boolean;
   idleAnimationIndex: number;
   direction?: number; // 1 for right, -1 for left
+  className?: string;
 }) {
   return (
     <motion.div
@@ -71,84 +73,140 @@ function DarbaanCharacter({
       style={{ transformOrigin: "bottom center" }}
       animate={
         isBowing
-          ? { rotate: [0, 12, 0], y: [0, 2, 0] }
+          ? { rotate: [0, 14, 0], y: [0, 3, 0] }
           : isWalking
-          ? { y: [0, -5, 0] }
+          ? { y: [0, -6, 0] }
           : idleAnimationIndex === 0
-          ? { y: [0, -2.5, 0] }
+          ? { y: [0, -3, 0] }
           : idleAnimationIndex === 1
-          ? { rotate: [0, -2, 0] }
-          : { scaleY: [1, 1.03, 1] }
+          ? { rotate: [0, -3, 0] }
+          : { scaleY: [1, 1.04, 1] }
       }
       transition={
         isBowing
-          ? { duration: 0.5, ease: "easeOut" }
+          ? { duration: 0.55, ease: "easeOut" }
           : isWalking
           ? { repeat: Infinity, duration: 0.25, ease: "easeInOut" }
           : { repeat: Infinity, duration: 3.5, ease: "easeInOut" }
       }
     >
       <div style={{ transform: `scaleX(${direction})` }}>
-        <svg viewBox="0 0 60 80" className="h-14 w-11 drop-shadow-md overflow-visible">
+        <svg viewBox="0 0 70 95" className={`${className} drop-shadow-[0_8px_16px_rgba(60,40,15,0.3)] overflow-visible`}>
+          <defs>
+            <linearGradient id="darbaanPagdiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#e64a19" />
+              <stop offset="50%" stopColor="#d94e2b" />
+              <stop offset="100%" stopColor="#b71c1c" />
+            </linearGradient>
+            <linearGradient id="darbaanSherwaniGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#f59e0b" />
+              <stop offset="50%" stopColor="#e69d2d" />
+              <stop offset="100%" stopColor="#d97706" />
+            </linearGradient>
+            <linearGradient id="darbaanSpearGold" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#fce6a6" />
+              <stop offset="50%" stopColor="#d4aa3b" />
+              <stop offset="100%" stopColor="#8c6c23" />
+            </linearGradient>
+          </defs>
+
+          {/* GROUND SHADOW ELLIPSE */}
+          <ellipse cx="35" cy="88" rx="20" ry="4" fill="#3a2512" opacity="0.22" />
+
           {/* ROYAL STAFF / SPEAR */}
           <motion.g
             animate={isWalking ? { rotate: [-6, 6, -6] } : idleAnimationIndex === 1 ? { rotate: [-8, 4, -8] } : {}}
             transition={{ repeat: Infinity, duration: isWalking ? 0.25 : 2 }}
-            style={{ transformOrigin: "12px 65px" }}
+            style={{ transformOrigin: "14px 75px" }}
           >
-            <line x1="8" y1="5" x2="8" y2="75" stroke="#b89138" strokeWidth="2.5" strokeLinecap="round" />
-            {/* Gold Spear Finial */}
-            <polygon points="8,1 12,8 8,14 4,8" fill="#8c6c23" stroke="#b89138" strokeWidth="0.8" />
-            <circle cx="8" cy="18" r="2.5" fill="#d4aa3b" />
+            {/* Spear Pole */}
+            <line x1="12" y1="6" x2="12" y2="88" stroke="url(#darbaanSpearGold)" strokeWidth="3" strokeLinecap="round" />
+            {/* Gold Spear Finial Tip */}
+            <polygon points="12,1 17,9 12,16 7,9" fill="#d4aa3b" stroke="#8c6c23" strokeWidth="1" />
+            <polygon points="12,3 15,9 12,14 9,9" fill="#fff5cc" />
+            <circle cx="12" cy="21" r="3" fill="#c0392b" stroke="#8c6c23" strokeWidth="0.8" />
+            {/* Decorative Tassel Cord */}
+            <path d="M 12 24 C 8 28 6 34 8 40 M 12 24 C 16 28 18 34 16 40" stroke="#c0392b" strokeWidth="1.2" fill="none" />
+            <circle cx="8" cy="40" r="1.5" fill="#d4aa3b" />
+            <circle cx="16" cy="40" r="1.5" fill="#d4aa3b" />
           </motion.g>
 
-          {/* DARBAAN BODY: SHERWANI COAT & LEGS */}
+          {/* DARBAAN BODY: LEGS & MOJRI SHOES */}
           <g>
             {/* Legs */}
             <motion.path
-              d="M 24 55 L 22 72 M 32 55 L 34 72"
+              d="M 28 64 L 26 84 M 42 64 L 44 84"
               stroke="#5e4718"
-              strokeWidth="3.5"
+              strokeWidth="4"
               strokeLinecap="round"
-              animate={isWalking ? { d: ["M 20 55 L 26 72 M 34 55 L 28 72", "M 26 55 L 20 72 M 28 55 L 34 72"] } : {}}
+              animate={isWalking ? { d: ["M 23 64 L 30 84 M 45 64 L 38 84", "M 30 64 L 23 84 M 38 64 L 45 84"] } : {}}
               transition={{ repeat: Infinity, duration: 0.25 }}
             />
-            {/* Curved Shoes (Juttis) */}
-            <path d="M 18 72 Q 14 72 16 70 M 34 72 Q 38 72 36 70" stroke="#8c6c23" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+            {/* Curved Royal Mojri Shoes with Embroidered Toe Curls */}
+            <path d="M 22 84 Q 16 84 18 81 C 20 79 24 82 28 84 Z" fill="#8c6c23" stroke="#5e4718" strokeWidth="1" />
+            <path d="M 40 84 Q 46 84 44 81 C 42 79 38 82 34 84 Z" fill="#8c6c23" stroke="#5e4718" strokeWidth="1" />
+            <path d="M 17 82 Q 13 80 16 78" stroke="#d4aa3b" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+            <path d="M 45 82 Q 49 80 46 78" stroke="#d4aa3b" strokeWidth="1.8" fill="none" strokeLinecap="round" />
 
-            {/* Royal Sherwani Coat (Saffron & Gold) */}
-            <path d="M 18 32 C 18 30, 38 30, 38 32 L 40 56 C 40 58, 16 58, 16 56 Z" fill="#e69d2d" stroke="#8c6c23" strokeWidth="1.5" />
-            {/* Gold Button Sash / Angrakha overlap */}
-            <path d="M 28 32 Q 24 45 20 56" stroke="#b89138" strokeWidth="2" fill="none" />
-            <circle cx="27" cy="38" r="1.2" fill="#fffdf8" />
-            <circle cx="25" cy="44" r="1.2" fill="#fffdf8" />
-            <circle cx="23" cy="50" r="1.2" fill="#fffdf8" />
+            {/* Royal Sherwani Coat (Saffron Amber with Embroidered Gold Trims) */}
+            <path d="M 22 36 C 22 33, 48 33, 48 36 L 51 66 C 51 69, 19 69, 19 66 Z" fill="url(#darbaanSherwaniGrad)" stroke="#8c6c23" strokeWidth="1.8" />
+            {/* Embroidered Gold Border Hem */}
+            <path d="M 19 64 C 25 67, 45 67, 51 64" stroke="#d4aa3b" strokeWidth="2" fill="none" />
+            {/* Gold Button Angrakha Sash Overlap */}
+            <path d="M 36 36 Q 30 52 24 66" stroke="#b89138" strokeWidth="2.5" fill="none" />
+            <circle cx="34" cy="43" r="1.5" fill="#fffdf8" stroke="#8c6c23" strokeWidth="0.8" />
+            <circle cx="31" cy="50" r="1.5" fill="#fffdf8" stroke="#8c6c23" strokeWidth="0.8" />
+            <circle cx="28" cy="57" r="1.5" fill="#fffdf8" stroke="#8c6c23" strokeWidth="0.8" />
+
+            {/* Royal Waist Patka / Sash */}
+            <path d="M 21 53 Q 35 57 49 53 L 48 57 Q 35 61 22 57 Z" fill="#c0392b" stroke="#8c6c23" strokeWidth="1" />
+            <path d="M 38 56 L 41 68 L 36 68 Z" fill="#c0392b" stroke="#8c6c23" strokeWidth="1" />
+            <line x1="36" y1="68" x2="41" y2="68" stroke="#d4aa3b" strokeWidth="2" strokeDasharray="1 1" />
 
             {/* Arms & Hands */}
-            <path d="M 18 34 Q 10 42 10 52" stroke="#e69d2d" strokeWidth="3" strokeLinecap="round" fill="none" />
-            <path d="M 38 34 Q 44 42 38 50" stroke="#e69d2d" strokeWidth="3" strokeLinecap="round" fill="none" />
+            <path d="M 22 38 Q 12 48 12 60" stroke="#e69d2d" strokeWidth="4" strokeLinecap="round" fill="none" />
+            <path d="M 48 38 Q 56 48 48 58" stroke="#e69d2d" strokeWidth="4" strokeLinecap="round" fill="none" />
+            <circle cx="12" cy="60" r="2.5" fill="#f5d6aa" />
+            <circle cx="48" cy="58" r="2.5" fill="#f5d6aa" />
           </g>
 
-          {/* HEAD & ROYAL PAGDI (TURBAN) */}
+          {/* HEAD & ROYAL MULTI-LAYERED TURBAN (PAGDI) */}
           <g>
-            {/* Face */}
-            <ellipse cx="28" cy="22" rx="7" ry="8" fill="#f5d6aa" stroke="#8c6c23" strokeWidth="1" />
+            {/* Neck */}
+            <rect x="31" y="30" width="8" height="6" fill="#f5d6aa" stroke="#8c6c23" strokeWidth="0.8" />
 
-            {/* Royal Handlebar Mustache */}
+            {/* Face */}
+            <ellipse cx="35" cy="24" rx="8.5" ry="9.5" fill="#f5d6aa" stroke="#8c6c23" strokeWidth="1.2" />
+
+            {/* Royal Red Tilak / Bindi Mark */}
+            <path d="M 35 17 L 36.5 20 L 35 21 L 33.5 20 Z" fill="#c0392b" />
+
+            {/* Expressive Royal Eyes */}
+            <circle cx="31.5" cy="22" r="1.2" fill="#2c1c0e" />
+            <circle cx="38.5" cy="22" r="1.2" fill="#2c1c0e" />
+
+            {/* PROMINENT ROYAL RAJASTHANI HANDLEBAR MUSTACHE */}
             <motion.path
-              d="M 22 25 Q 28 27 34 25 Q 37 22 35 20 Q 32 24 28 24 Q 24 24 21 20 Q 19 22 22 25 Z"
-              fill="#3a2b1c"
+              d="M 27 28 Q 35 31 43 28 Q 47 24 45 22 Q 41 27 35 27 Q 29 27 25 22 Q 23 24 27 28 Z"
+              fill="#2c1c0e"
+              stroke="#1a1008"
+              strokeWidth="0.5"
               animate={idleAnimationIndex === 2 ? { rotate: [-4, 4, -4] } : {}}
               transition={{ repeat: Infinity, duration: 1.5 }}
-              style={{ transformOrigin: "28px 24px" }}
+              style={{ transformOrigin: "35px 27px" }}
             />
 
-            {/* Royal Pagdi (Saffron Red Turban) */}
-            <path d="M 19 20 C 18 10, 38 10, 37 20 C 37 20, 28 14, 19 20 Z" fill="#d94e2b" stroke="#8c6c23" strokeWidth="1.2" />
-            <path d="M 20 18 Q 28 12 36 18" stroke="#f59e0b" strokeWidth="2" fill="none" />
-            {/* Turban Kalgi / Feather Ornament */}
-            <path d="M 28 12 Q 28 4 31 2" stroke="#b89138" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-            <circle cx="31" cy="2" r="1.8" fill="#d4aa3b" />
+            {/* RICH MULTI-LAYERED PAGDI (ROYAL SAFFRON & CRIMSON TURBAN) */}
+            <path d="M 23 22 C 22 9, 48 9, 47 22 C 47 22, 35 15, 23 22 Z" fill="url(#darbaanPagdiGrad)" stroke="#8c6c23" strokeWidth="1.5" />
+            {/* Turban Swirl Band Lines */}
+            <path d="M 24 20 Q 35 12 46 20" stroke="#f59e0b" strokeWidth="2.5" fill="none" />
+            <path d="M 26 17 Q 35 10 44 17" stroke="#ffd54f" strokeWidth="1.8" fill="none" />
+            <path d="M 28 14 Q 35 8 42 14" stroke="#c0392b" strokeWidth="1.5" fill="none" />
+
+            {/* Royal Gold Kalgi / Feather Brocade Ornament */}
+            <path d="M 35 11 Q 35 2 39 0" stroke="#d4aa3b" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+            <circle cx="39" cy="0" r="2.5" fill="#d4aa3b" stroke="#8c6c23" strokeWidth="0.8" />
+            <circle cx="39" cy="0" r="1" fill="#c0392b" />
           </g>
         </svg>
       </div>
@@ -157,9 +215,9 @@ function DarbaanCharacter({
       {isWalking && (
         <motion.div
           initial={{ opacity: 0.8, scale: 0.6, y: 0 }}
-          animate={{ opacity: 0, scale: 1.6, y: 6 }}
+          animate={{ opacity: 0, scale: 1.6, y: 8 }}
           transition={{ repeat: Infinity, duration: 0.25 }}
-          className="absolute -bottom-1 h-2 w-4 rounded-full bg-[#b89138]/40 blur-[1px]"
+          className="absolute -bottom-1 h-2.5 w-6 rounded-full bg-[#b89138]/40 blur-[1px]"
         />
       )}
     </motion.div>

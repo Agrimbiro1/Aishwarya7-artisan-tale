@@ -75,7 +75,7 @@ export function Welcome({
       >
         {/* Organic Deckle / Torn Edge Handmade Cardstock Backdrop */}
         <div
-          className="deckle-edge absolute -inset-2.5 rounded-xl opacity-95"
+          className="deckle-edge card-sand-texture absolute -inset-2.5 rounded-xl opacity-95"
           aria-hidden="true"
         />
 

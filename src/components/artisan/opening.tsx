@@ -2,6 +2,8 @@ import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 import { couple, invitation } from "@/data/wedding";
 import heroIllustration from "@/assets/hero-illustration.png";
+import floral from "@/assets/floral-spray.png";
+import wreath from "@/assets/wreath-ring.png";
 import { Motif } from "./atoms";
 import { HeroParallaxBackdrop } from "./hero-parallax-backdrop";
 import { useAmbience } from "./use-ambience";
@@ -87,33 +89,129 @@ export function Opening({
       animate={{ opacity: isLeaving ? 0 : 1 }}
       transition={{ duration: 0.6, ease: EASE_OUT_CUBIC }}
     >
-      {/* Background Handcrafted Cotton Fabric Texture */}
+      {/* Background Handcrafted Sand-Grain & Fabric Texture */}
       <div className="bg-fabric absolute inset-0 opacity-40 pointer-events-none" />
+      <div className="grain absolute inset-0 opacity-80 pointer-events-none" aria-hidden="true" />
+      <div className="card-sand-texture absolute inset-0 opacity-60 pointer-events-none" aria-hidden="true" />
 
-      {/* Sound Toggle Button (Bottom-Right Corner with Hover Pulse Ring) */}
+      {/* SUBTLE ROYAL RADIAL VIGNETTE OVERLAY (WARM DARK CORNERS FOR REALISTIC SPOTLIGHT DEPTH) */}
+      <div
+        className="pointer-events-none absolute inset-0 z-10 opacity-75 mix-blend-multiply select-none"
+        aria-hidden="true"
+        style={{
+          background:
+            "radial-gradient(ellipse 85% 85% at 50% 45%, transparent 35%, rgba(95, 65, 25, 0.22) 70%, rgba(60, 38, 12, 0.45) 100%)",
+        }}
+      />
+
+      {/* FADED FLORAL WATERMARK SPRIGS IN ALL FOUR CORNERS */}
+      <img
+        src={floral}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-12 -left-12 w-72 sm:w-96 opacity-[0.22] mix-blend-multiply select-none"
+      />
+      <img
+        src={floral}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-12 -right-12 w-72 sm:w-96 opacity-[0.22] mix-blend-multiply select-none transform scale-x-[-1]"
+      />
+      <img
+        src={floral}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-12 -left-12 w-72 sm:w-96 opacity-[0.22] mix-blend-multiply select-none transform scale-y-[-1]"
+      />
+      <img
+        src={floral}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-12 -right-12 w-72 sm:w-96 opacity-[0.22] mix-blend-multiply select-none transform scale-x-[-1] scale-y-[-1]"
+      />
+
+      {/* SUBTLE CENTRAL WREATH WATERMARK BEHIND WAX SEAL */}
+      <img
+        src={wreath}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[34rem] sm:w-[44rem] opacity-[0.09] mix-blend-multiply select-none"
+      />
+
+      {/* Sound Toggle Music Button (Bottom-Right Corner) */}
       <button
         type="button"
         onClick={(e) => {
           e.stopPropagation();
           toggle();
         }}
-        aria-label={playing ? "Pause ambient audio" : "Play ambient audio"}
-        className="stamp group fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-gold/50 bg-[#f4ebda]/95 text-ink shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-gold hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] active:scale-95 cursor-pointer"
+        aria-label={playing ? "Pause music" : "Play music"}
+        title={playing ? "Pause Music" : "Play Music"}
+        className="card-sand-texture group fixed bottom-6 right-6 z-50 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-[#b89138]/60 bg-[#faf5eb]/90 text-[#8c6c23] shadow-[0_8px_24px_rgba(60,40,15,0.18)] backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#8c6c23] hover:bg-[#f5ebd7] active:scale-95 cursor-pointer"
       >
-        {/* Hover Pulse Ring */}
-        <span className="absolute -inset-1 rounded-full bg-gold/25 opacity-0 blur-sm transition-all duration-300 group-hover:opacity-100 pointer-events-none" />
-        <span className="absolute inset-0 rounded-full border border-gold/60 opacity-0 transition-all duration-500 group-hover:scale-150 group-hover:opacity-100 group-hover:animate-ping pointer-events-none" />
+        {/* Inner hairline gold ring */}
+        <span className="absolute inset-1 rounded-full border border-[#b89138]/30 pointer-events-none transition-colors duration-300 group-hover:border-[#8c6c23]/50" />
+
+        {/* Soft warm aura pulse when playing */}
+        {playing && (
+          <span className="absolute -inset-1 rounded-full bg-[#b89138]/20 animate-ping opacity-60 pointer-events-none" />
+        )}
 
         {playing ? (
-          <svg xmlns="http://www.w3.org/2000/svg" className="relative z-10 h-5 w-5 fill-current text-brass transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
-            <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM3 9v6h4l5 5V4L7 9H3z" />
-          </svg>
+          <div className="relative z-10 flex items-center justify-center gap-0.5">
+            {/* Active Music Note Icon in rich warm brass */}
+            <svg className="h-5 w-5 text-[#8c6c23] fill-current" viewBox="0 0 24 24">
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+            </svg>
+            {/* Mini Animated Equalizer Sound Bars */}
+            <span className="flex items-end gap-[1.5px] h-3 ml-0.5">
+              <span className="w-[2px] h-full bg-[#8c6c23] rounded-full animate-[bounce_0.8s_infinite_100ms]" />
+              <span className="w-[2px] h-2/3 bg-[#8c6c23] rounded-full animate-[bounce_0.8s_infinite_300ms]" />
+              <span className="w-[2px] h-4/5 bg-[#8c6c23] rounded-full animate-[bounce_0.8s_infinite_500ms]" />
+            </span>
+          </div>
         ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" className="relative z-10 h-5 w-5 fill-current text-ink-soft transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
-            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73 4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
-          </svg>
+          <div className="relative z-10 flex items-center justify-center">
+            {/* Paused Music Note Icon with Slash */}
+            <svg className="h-5 w-5 text-[#8c6c23]/75 fill-current" viewBox="0 0 24 24">
+              <path d="M4.27 3L3 4.27l9 9v.28c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V14.27l5 5L20.73 21 22 19.73 4.27 3zM14 7h4V3h-6v5.18l2 2V7z"/>
+            </svg>
+          </div>
         )}
       </button>
+
+      {/* LOW-DENSITY AMBIENT GOLDEN SPARKLES SHIMMER */}
+      {!reduced && stage !== "hero" && (
+        <div className="pointer-events-none absolute inset-0 z-10 overflow-hidden" aria-hidden="true">
+          {[
+            { top: "18%", left: "15%", delay: 0, duration: 3.5, size: "h-2 w-2" },
+            { top: "28%", left: "80%", delay: 1.2, duration: 4.2, size: "h-2.5 w-2.5" },
+            { top: "72%", left: "22%", delay: 0.7, duration: 3.8, size: "h-2 w-2" },
+            { top: "68%", left: "75%", delay: 2.0, duration: 4.5, size: "h-3 w-3" },
+            { top: "42%", left: "10%", delay: 1.5, duration: 3.2, size: "h-1.5 w-1.5" },
+            { top: "82%", left: "48%", delay: 0.4, duration: 4.0, size: "h-2.5 w-2.5" },
+            { top: "15%", left: "62%", delay: 2.3, duration: 3.6, size: "h-2 w-2" },
+          ].map((sparkle, idx) => (
+            <motion.div
+              key={`opening-sparkle-${idx}`}
+              initial={{ opacity: 0, scale: 0.5, y: 0 }}
+              animate={{
+                opacity: [0, 0.8, 0],
+                scale: [0.6, 1.3, 0.6],
+                y: [-8, -22, -8],
+              }}
+              transition={{
+                duration: sparkle.duration,
+                repeat: Infinity,
+                delay: sparkle.delay,
+                ease: "easeInOut",
+              }}
+              style={{ top: sparkle.top, left: sparkle.left }}
+              className={`absolute rounded-full bg-gradient-to-tr from-[#ffe699] via-[#d4af37] to-[#fffdf8] shadow-[0_0_10px_rgba(212,175,55,0.85)] ${sparkle.size}`}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Stage 1 & Stage 2: Sealed Envelope Screen */}
       {stage !== "hero" ? (
@@ -159,45 +257,85 @@ export function Opening({
             animate={
               stage === "opening"
                 ? { scale: reduced ? 1 : 1.08, opacity: 0 }
-                : { scale: reduced ? 1 : [1, 1.025, 1] }
+                : { scale: reduced ? 1 : [1, 1.035, 1], y: reduced ? 0 : [0, -3, 0] }
             }
             transition={
               stage === "opening"
                 ? { duration: 0.4, ease: EASE_OUT_CUBIC }
                 : { duration: 3.2, repeat: Infinity, ease: "easeInOut" }
             }
-            whileHover={{ scale: stage === "sealed" && !reduced ? 1.04 : 1 }}
-            whileTap={{ scale: stage === "sealed" && !reduced ? 0.96 : 1 }}
+            whileHover={{ scale: stage === "sealed" && !reduced ? 1.05 : 1 }}
+            whileTap={{ scale: stage === "sealed" && !reduced ? 0.95 : 1 }}
           >
-            {/* Embossed Wax Seal Disc */}
+            {/* 3D Royal Embossed Wax Seal Disc */}
             <div className="relative flex items-center justify-center">
+              {/* Deep Ambient Wax Glow Shadow */}
               <div
-                className="absolute -inset-4 rounded-full blur-md opacity-40"
+                className="absolute -inset-6 rounded-full blur-xl opacity-60 pointer-events-none"
                 style={{
-                  background: "radial-gradient(circle, rgba(201, 166, 107, 0.6) 0%, transparent 70%)",
+                  background: "radial-gradient(circle, rgba(184, 145, 56, 0.65) 0%, rgba(120, 78, 16, 0.3) 50%, transparent 75%)",
                 }}
               />
 
+              {/* 3D Organic Sculpted Wax Seal Medallion */}
               <div
-                className="relative h-28 w-28 sm:h-32 sm:w-32 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300"
+                className="card-sand-texture relative h-32 w-32 sm:h-36 sm:w-36 flex items-center justify-center transition-all duration-300 overflow-hidden"
                 style={{
+                  borderRadius: "50% 48% 52% 49% / 49% 52% 48% 51%", // Organic melted wax stamp perimeter
                   background:
-                    "radial-gradient(circle at 35% 30%, #e8ba6c 0%, #c9a66b 35%, #9b753b 70%, #64471c 100%)",
+                    "radial-gradient(circle at 32% 28%, #f7d488 0%, #e0b05b 22%, #b88a38 52%, #855b1b 80%, #4a300a 100%)",
                   boxShadow: `
-                    0 20px 40px -10px rgba(60, 42, 18, 0.45),
-                    0 8px 18px -4px rgba(60, 42, 18, 0.3),
-                    inset 0 3px 6px rgba(255, 246, 215, 0.7),
-                    inset 0 -3px 8px rgba(45, 28, 8, 0.5)
+                    0 26px 55px -10px rgba(45, 28, 8, 0.65),
+                    0 14px 28px -4px rgba(45, 28, 8, 0.45),
+                    inset 0 4px 8px rgba(255, 248, 220, 0.85),
+                    inset 0 -5px 12px rgba(35, 20, 5, 0.75),
+                    inset 4px 4px 10px rgba(255, 242, 190, 0.5)
                   `,
-                  border: "1px solid rgba(255, 240, 200, 0.45)",
+                  border: "1.5px solid rgba(255, 242, 190, 0.6)",
                 }}
               >
-                {/* Dashed Inner Rim */}
-                <div className="h-[80%] w-[80%] rounded-full border border-dashed border-[#fff4d6]/60 flex items-center justify-center">
+                {/* Micro Sand Grain Wax Texture Overlay */}
+                <div className="grain absolute inset-0 opacity-70 pointer-events-none" aria-hidden="true" />
+
+                {/* Metallic Sheen Sweep */}
+                {!reduced && (
+                  <motion.div
+                    animate={{ x: ["-130%", "230%"] }}
+                    transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 3.0, ease: "easeInOut" }}
+                    className="pointer-events-none absolute inset-y-0 w-20 bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-[-20deg]"
+                  />
+                )}
+
+                {/* Top-Left Specular Light Highlight Curve */}
+                <div
+                  className="pointer-events-none absolute top-1.5 left-2.5 w-16 h-8 rounded-full blur-[1px] transform -rotate-45"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 245, 210, 0.3) 50%, transparent 100%)",
+                  }}
+                />
+
+                {/* Concentric Debossed Inner Wax Ridge (Stamped Bevel Rim) */}
+                <div
+                  className="relative h-[82%] w-[82%] rounded-full flex items-center justify-center transition-all duration-300"
+                  style={{
+                    boxShadow: `
+                      inset 0 3px 6px rgba(40, 24, 6, 0.7),
+                      inset 0 -2px 5px rgba(255, 245, 210, 0.4),
+                      0 2px 4px rgba(255, 248, 220, 0.4)
+                    `,
+                    background: "radial-gradient(circle at 35% 30%, #e0b05b 0%, #a87e2f 65%, #664312 100%)",
+                    border: "1.5px dashed rgba(255, 245, 210, 0.75)",
+                  }}
+                >
+                  {/* Embossed Monogram Script Text with Deep 3D Letterpress Shadow */}
                   <span
-                    className="font-[family-name:var(--font-script)] text-3xl sm:text-4xl tracking-wider select-none text-[#fff8ed]"
+                    className="font-[family-name:var(--font-script)] text-3.5xl sm:text-4.5xl tracking-wider select-none text-[#fffbf2] filter drop-shadow-md"
                     style={{
-                      textShadow: "0 1px 3px rgba(50, 32, 10, 0.8), 0 0 12px rgba(255, 240, 200, 0.5)",
+                      textShadow: `
+                        1px 2px 4px rgba(35, 20, 5, 0.95),
+                        -1px -1px 2px rgba(255, 248, 220, 0.7),
+                        0 0 14px rgba(255, 240, 190, 0.6)
+                      `,
                     }}
                   >
                     {monogram}
@@ -220,9 +358,16 @@ export function Opening({
                 ))}
               </p>
 
-              <p className="letterpress mt-3 font-[family-name:var(--font-roman)] text-[0.62rem] tracking-[0.32em] text-brass uppercase">
-                Tap anywhere to open
-              </p>
+              {/* ENHANCED PULSING 'TAP ANYWHERE TO OPEN' CALL TO ACTION */}
+              <motion.p
+                animate={reduced ? {} : { opacity: [0.65, 1, 0.65], scale: [0.98, 1.02, 0.98] }}
+                transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                className="letterpress mt-4 flex items-center justify-center gap-2 font-[family-name:var(--font-roman)] text-[0.68rem] sm:text-xs tracking-[0.35em] text-[#8c6c23] uppercase font-bold drop-shadow-xs"
+              >
+                <span className="text-[#b89138] text-[0.55rem]">✦</span>
+                <span>Tap anywhere to open</span>
+                <span className="text-[#b89138] text-[0.55rem]">✦</span>
+              </motion.p>
             </motion.div>
           </motion.div>
         </div>

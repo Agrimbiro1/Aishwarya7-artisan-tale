@@ -184,7 +184,7 @@ function FamilySummaryCard({
       <div className={`relative w-full h-full rounded-2xl ${data.cardShadow} transition-shadow duration-500`}>
         {/* Authentic Deckle Edge Filter Base */}
         <div
-          className={`deckle-edge absolute inset-0 rounded-2xl ${data.cardWash} pointer-events-none transition-all duration-500`}
+          className={`deckle-edge card-sand-texture absolute inset-0 rounded-2xl ${data.cardWash} pointer-events-none transition-all duration-500`}
           aria-hidden="true"
         />
 
